@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tchappy15/CodePipetoEB"
+    "url": "git+https://github.com/tchappy15/CodePipetoEB.git"
   },
   "author": "",
   "license": "ISC",
@@ -26,5 +26,9 @@
   },
   "devDependencies": {
     "mocha": "^10.8.2"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": []
 }

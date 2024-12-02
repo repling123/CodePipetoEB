@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Bryce512/CodePipelinetoEB"
+    "url": "https://github.com/tchappy15/CodePipetoEB"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Bryce512/CodePipelinetoEB"
+    "url": "https://github.com/tchappy15/CodePipetoEB"
   },
-  "homepage": "https://github.com/Bryce512/CodePipelinetoEB/#readme",
+  "homepage": "https://github.com/tchappy15/CodePipetoEB/#readme",
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^4.21.1",

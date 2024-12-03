@@ -1,18 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="/css/style.css">
-  <title>Home - Turtle Shelter Project</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turtle Shelter Project</title>
+  <style>
+    /* General Reset */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: rgb(255, 255, 255);
+    }
+
+    /* Header Styles */
+    header {
+      position: relative;
+      height: 100vh;
+      background: url('../Images/Home-Page-Header.jpg') no-repeat center center/cover;
+      color: rgb(240, 171, 171);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-content {
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .logo {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: rgb(226, 134, 134);
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #66e6e6;
+    }
+
+    .header-text .tagline {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .header-text .main-title {
+      font-size: 2.5rem;
+      margin-top: 10px;
+    }
+
+    .learn-more-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .learn-more-btn:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      padding: 20px;
+      text-align: center;
+      color: black;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        height: 70vh;
+      }
+
+      nav {
+        position: static;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      nav a {
+        font-size: 1rem;
+      }
+
+      .header-text .main-title {
+        font-size: 2rem;
+      }
+
+      .header-text .tagline {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        height: 60vh;
+      }
+
+      .logo {
+        font-size: 1.2rem;
+      }
+
+      .header-text .main-title {
+        font-size: 1.8rem;
+      }
+
+      .header-text .tagline {
+        font-size: 0.8rem;
+      }
+
+      .learn-more-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Turtle Shelter Project <br>
-        Starts with you
-    </h1>
+    <div class="header-content">
+      <div class="logo">Turtle Shelter Project</div>
+      <nav>
+        <a href="/home">Home</a>
+        <a href="/help">How You Can Help</a>
+      </nav>
+      <div class="header-text">
+        <p class="tagline">Helping to save lives of people experiencing homelessness</p>
+        <h1 class="main-title">Starts with you</h1>
+        <a href="#learn-more" class="learn-more-btn">Learn More</a>
+      </div>
+    </div>
   </header>
   <main>
-    <p>Helping to save lives of people experiencing homelessness</p>
-    <a href="/volunteer">Join as a Volunteer</a>
+    <h1>Welcome to the Turtle Shelter Project</h1>
+    <p>This is the main page. Feel free to explore!</p>
   </main>
 </body>
 </html>

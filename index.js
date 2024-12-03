@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express();
 let path = require('path');
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 // grab html form from file 
 // allows to pull JSON data from form 
 app.use(express.urlencoded( {extended: true} )); 
@@ -32,6 +32,19 @@ app.get('/', (req, res) => {
 
 // Serve static files (e.g., CSS) if needed
 app.use(express.static('public'));
+
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
+// Example route for home.ejs
+app.get('/', (req, res) => {
+  res.render('home');
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
 
 //test
 //branch test

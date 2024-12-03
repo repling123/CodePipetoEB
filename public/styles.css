@@ -1,181 +1,193 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    /* General Reset */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: rgb(255, 255, 255);
+      overflow-x: hidden;
+      max-width: 100%;
+    }
 
-body {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-  background-color: #f9f9f9;
-  color: #333;
-  margin: 0;
-}
+    /* Header Styles */
+    /* header {
+      position: relative;
+      height: 100vh;
+      background: url('/Images/Home-Page-Header.jpg') no-repeat center center/cover;
+      background: url('/Images/Home-Page-Header.jpg') no-repeat center center/cover; 
+      color: rgb(255, 255, 255);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    } */
 
-/* Header */
-header {
-  background: #00796b; /* Dark teal color */
-  color: #fff;
-  padding: 1rem 2rem;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+    header {
+      position: relative;
+      height: 100vh;
+      background: url('/Images/Home-Page-Header.jpg') no-repeat center center;
+      background-size: cover; /* Ensures image covers entire header */
+      background-attachment: fixed; /* Creates a parallax-like effect */
+      color: white; /* Ensure text is readable */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* Optional: add a semi-transparent overlay for better text readability */
+      background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('/Images/Home-Page-Header.jpg');
+    }
+    
+    /* Ensure text has good contrast */
+    .header-text {
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(0,0,0,0.3); /* Optional: adds a subtle background to text */
+      border-radius: 10px; /* Optional: softens the text background */
+    }
 
-header a {
-  color: #fff;
-  text-decoration: none;
-  margin: 0 1rem;
-}
+    .header-text .main-title {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .header-text .tagline {
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
 
-header a:hover {
-  text-decoration: underline;
-}
+    .header-content {
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #be7cf8;
+    }
 
-/* Main Content */
-main {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: auto;
-}
+    .logo {
+      font-family: 'Arial Black', Arial, sans-serif;
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
 
-main h1, main h2, main h3 {
-  color: #00796b;
-  margin-bottom: 1rem;
-}
+    nav {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 15px;
+    }
 
-main p {
-  margin-bottom: 1rem;
-}
+    nav a {
+      text-decoration: none;
+      color: rgb(255, 255, 255);
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
 
-/* Buttons */
-button,
-a.button {
-  display: inline-block;
-  background: #00796b;
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
+    nav a:hover {
+      color: #be7cf8;
+    }
 
-button:hover,
-a.button:hover {
-  background: #005a4e; /* Slightly darker teal */
-}
+    .header-text .tagline {
+      font-size: 1rem;
+    }
+    /* Header Text */
+    .header-text .tagline {
+      font-size: 1.2rem;
+      margin: 0;
+    }
 
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
+    .header-text .main-title {
+      font-size: 2.5rem;
+      font-size: 3rem;
+      margin-top: 10px;
+    }
 
-/* Forms */
-form {
-  background: #fff;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: auto;
-}
+    .learn-more-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
 
-form label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
+    .learn-more-btn:hover {
+      background-color: #0056b3;
+    }
 
-form input,
-form select,
-form textarea {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+    main {
+      padding: 20px;
+      text-align: center;
+      color: black;
+    }
 
-form input:focus,
-form select:focus,
-form textarea:focus {
-  outline: none;
-  border-color: #00796b;
-}
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        height: 70vh;
+      }
 
-/* Tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
-  font-size: 1rem;
-  text-align: left;
-}
+      nav {
+        position: static;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
 
-table th,
-table td {
-  border: 1px solid #ddd;
-  padding: 0.75rem;
-}
+      nav a {
+        font-size: 1rem;
+      }
 
-table th {
-  background: #00796b;
-  color: #fff;
-}
+      .header-text .main-title {
+        font-size: 2rem;
+      }
 
-table tr:nth-child(even) {
-  background: #f2f2f2;
-}
+      .header-text .tagline {
+        font-size: 0.9rem;
+      }
+    }
 
-table tr:hover {
-  background: #e0f7fa;
-}
+    @media (max-width: 480px) {
+      header {
+        height: 60vh;
+      }
 
-/* Footer */
-footer {
-  background: #00796b;
-  color: #fff;
-  text-align: center;
-  padding: 1rem;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-}
+      .logo {
+        font-size: 1.2rem;
+      }
 
-footer a {
-  color: #ffcc80;
-  text-decoration: none;
-}
+      .header-text .main-title {
+        font-size: 1.8rem;
+      }
 
-footer a:hover {
-  text-decoration: underline;
-}
+      .header-text .tagline {
+        font-size: 0.8rem;
+      }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  header {
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
-  }
-
-  main {
-    padding: 1rem;
-  }
-
-  form {
-    padding: 1.5rem;
-  }
-
-  table {
-    font-size: 0.9rem;
-  }
-}
+      .learn-more-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+    }
+    /* Optional Styling */
+    main {
+      padding: 20px;
+      text-align: center;
+    }

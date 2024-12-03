@@ -22,6 +22,8 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 // Serve static files (CSS, images, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/Images', express.static(path.join(__dirname, 'Images')));
 // Define route for home page
 
 // Serve the login page (login.ejs)

@@ -26,16 +26,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Images', express.static(path.join(__dirname, 'Images')));
 // Define route for home page
 
-// Serve the login page (login.ejs)
+// Serve the route root
 app.get('/', (req, res) => {
-  res.render('home');  // Renders 'login.ejs' file
+  res.render('home');  // Renders 'home.ejs' file
 });
 
 
-// Serve static files (e.g., CSS) if needed
-app.use(express.static('public'));
+// Serve the login landing page (login.ejs)
+app.get('/loginLanding', (req, res) => {
+  res.render('loginLanding');  // Renders 'loginLanding.ejs' file
+});
 
-//test
-//branch test
+
 // port number, (parameters) => what you want it to do.
 app.listen(PORT, () => console.log('Server started on port ' + PORT));

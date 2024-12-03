@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header for styling consistency -->
+  <header>
+    <div class="header-text">
+      <h1 class="main-title">Welcome</h1>
+      <p class="tagline">Please log in to continue.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- Centered Login Box -->
+    <div id="login-box" style="max-width: 400px; margin: 0 auto; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+      <form id="login-form" action="/auth/login" method="POST">
+        <h2 style="color: #333; margin-bottom: 1rem;">Login</h2>
+        <label for="username" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #333;">Username</label>
+        <input type="text" id="username" name="username" required 
+               style="width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 5px;">
+
+        <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #333;">Password</label>
+        <input type="password" id="password" name="password" required 
+               style="width: 100%; padding: 10px; margin-bottom: 1.5rem; border: 1px solid #ccc; border-radius: 5px;">
+
+        <button type="submit" class="learn-more-btn" style="width: 100%;">Login</button>
+      </form>
+    </div>
+
+    <!-- Landing Page Section -->
+    <div id="landing-page" style="visibility: hidden; margin-top: 2rem;">
+      <h1 style="color: #333;">Welcome to the Dashboard</h1>
+      <ul style="list-style-type: none; padding: 0;">
+        <li><a href="/admin" class="learn-more-btn" style="display: block; margin: 10px auto; width: 200px; text-align: center;">Admin Maintenance</a></li>
+        <li><a href="/volunteer" class="learn-more-btn" style="display: block; margin: 10px auto; width: 200px; text-align: center;">Volunteer Maintenance</a></li>
+        <li><a href="/events" class="learn-more-btn" style="display: block; margin: 10px auto; width: 200px; text-align: center;">Event Maintenance</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <script>
+    // Display the landing page after login
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('loggedIn') === 'true') {
+      document.getElementById('login-box').style.display = 'none';
+      document.getElementById('landing-page').style.visibility = 'visible';
+    }
+  </script>
+</body>
+</html>

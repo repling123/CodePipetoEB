@@ -4,8 +4,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Turtle Shelter Project</title>
-  <!-- Link to your CSS -->
-  <link rel="stylesheet" href="/public/style.css">
+  <style>
+    /* General Reset */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: rgb(255, 255, 255);
+    }
+
+    /* Header Styles */
+    header {
+      position: relative;
+      height: 100vh;
+      background: url('..\Images\Home-Page-Header.jpg') no-repeat center center/cover; /* Replace with your image */
+      color: rgb(240, 171, 171);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-content {
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: rgb(226, 134, 134);
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #66e6e6;
+    }
+
+    /* Header Text */
+    .header-text .tagline {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .header-text .main-title {
+      font-size: 3rem;
+      margin-top: 10px;
+    }
+
+    .learn-more-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .learn-more-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Optional Styling */
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <header>

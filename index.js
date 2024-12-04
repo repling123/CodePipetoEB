@@ -68,17 +68,72 @@ app.get('/', (req, res) => {
     
 
     /*ADMIN MAINTENANCE ROUTES*/
-      //add admin get
+    // Route to fetch all admin users and render the admin maintenance page
+    app.get('/admin', async (req, res) => {
+      try {
+        // Query to select all rows from the `adminusers` table
+        const result = await pool.query('SELECT * FROM adminusers');
 
-      //add admin post
-        
-      
-      //edit admin get
+        // Render the admin maintenance page and pass the data
+        res.render('adminMaintenance', { adminusers: result.rows });
+      } catch (error) {
+        console.error('Error fetching admin users:', error);
+        res.status(500).send('Error fetching admin users.');
+      }
+    });
 
-      //edit admin post
+    // Route to add a new admin (GET)
+    app.get('/addAdmin', (req, res) => {
+      res.render('addAdmin'); // Render the addAdmin page
+    });
 
+    // Route to add a new admin (POST)
+    app.post('/addAdmin', async (req, res) => {
+      const { username, password } = req.body;
+      try {
+        await pool.query('INSERT INTO adminusers (Username, Password) VALUES ($1, $2)', [username, password]);
+        res.redirect('/admin');
+      } catch (error) {
+        console.error('Error adding admin user:', error);
+        res.status(500).send('Error adding admin user.');
+      }
+    });
 
-      //delete admin
+    // Route to edit an admin (GET)
+    app.get('/admin', async (req, res) => {
+      try {
+        const result = await pool.query('SELECT * FROM adminusers');
+        res.render('adminMaintenance', { adminusers: result.rows });
+      } catch (error) {
+        console.error('Error fetching admin users:', error);
+        res.status(500).send('Error fetching admin users.');
+      }
+    });
+
+  // Route to edit an admin (POST)
+  app.post('/editAdmin/:id', async (req, res) => {
+    const { id } = req.params;
+    const { username, password } = req.body;
+    try {
+      await pool.query('UPDATE adminusers SET Username = $1, Password = $2 WHERE UserID = $3', [username, password, id]);
+      res.redirect('/admin');
+    } catch (error) {
+      console.error('Error updating admin user:', error);
+      res.status(500).send('Error updating admin user.');
+    }
+  });
+
+  // Route to delete an admin (DELETE)
+  app.delete('/deleteAdmin/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      await pool.query('DELETE FROM adminusers WHERE UserID = $1', [id]);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting admin user:', error);
+      res.status(500).json({ success: false, message: 'Error deleting admin user.' });
+    }
+  });
 
 
     /*ADMIN VOLUNTEER MAINTENANCE ROUTES*/

@@ -91,26 +91,38 @@ app.get('/', (req, res) => {
     app.post('/addAdmin', async (req, res) => {
       const { username, password } = req.body;
       try {
-        await pool.query('INSERT INTO adminusers (username, password) VALUES ($1, $2)', [username, password]);
-        res.redirect('/admin');
+        await pool.query('INSERT INTO adminusers (Username, Password) VALUES ($1, $2)', [username, password]);
+        res.redirect('/adminMaintenance');
       } catch (error) {
         console.error('Error adding admin user:', error);
         res.status(500).send('Error adding admin user.');
       }
     });
 
-  // Route to edit an admin (POST)
-  app.post('/editAdmin/:id', async (req, res) => {
-    const { id } = req.params;
-    const { username, password } = req.body;
-    try {
-      await pool.query('UPDATE adminusers SET username = $1, password = $2 WHERE userid = $3', [username, password, id]);
-      res.redirect('/admin');
-    } catch (error) {
-      console.error('Error updating admin user:', error);
-      res.status(500).send('Error updating admin user.');
-    }
-  });
+ // Route to edit an admin (GET)
+app.get('/editAdmin/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM adminusers WHERE UserID = $1', [id]);
+    res.render('editAdmin', { user: result.rows[0] });
+  } catch (error) {
+    console.error('Error fetching admin user:', error);
+    res.status(500).send('Error fetching admin user.');
+  }
+});
+
+// Route to edit an admin (POST)
+app.post('/editAdmin/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, password } = req.body;
+  try {
+    await pool.query('UPDATE adminusers SET Username = $1, Password = $2 WHERE UserID = $3', [username, password, id]);
+    res.redirect('/adminMaintenance');
+  } catch (error) {
+    console.error('Error updating admin user:', error);
+    res.status(500).send('Error updating admin user.');
+  }
+});
 
   // Route to delete an admin (DELETE)
   app.delete('/deleteAdmin/:id', async (req, res) => {

@@ -160,7 +160,7 @@
   
       <!-- Login box -->
       <div id="login-box">
-        <form id="login-form">
+        <form id="login-form" action="/login" method="POST"> 
           <h2>Login</h2>
   
           <!-- Error message is hidden by default -->
@@ -187,32 +187,42 @@
       const errorMessage = document.getElementById('error-message');
       const links = document.getElementById('links');
       const loginBox = document.getElementById('login-box');
-  
-      form.addEventListener('submit', async (e) => {
+
+
+     form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent form submission
-  
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-  
-        // Send AJAX request to validate login
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password }),
-        });
-  
-        const data = await response.json();
-  
-        if (data.success) {
-          // On successful login: hide the login box and show the links
-          loginBox.classList.add('hidden');
-          links.classList.remove('hidden');
-        } else {
-          // On failed login: show error message
-          errorMessage.textContent = data.message;
+
+        console.log('Sending login request for:', { username, password }); // Add log here
+
+        try {
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+          });
+
+          const data = await response.json();
+          console.log('Received response:', data); // Log the response
+
+          if (data.success) {
+            loginBox.classList.add('hidden');
+            links.classList.remove('hidden');
+          } else {
+            errorMessage.textContent = data.message;
+            errorMessage.style.display = 'block';
+          }
+        } catch (error) {
+          console.error('Error during login request:', error); // Log any error during the fetch request
+          errorMessage.textContent = 'An unexpected error occurred.';
           errorMessage.style.display = 'block';
         }
       });
+
+
+
     </script>
   </body>
   </html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Events Maintenance</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1 class="main-title">Past Events Maintenance</h1>
+    <div class="container">
+        <h2 class="section-title">Events to be Updated</h2>
+        <table class="events-table"></table>
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Duration</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip Code</th>
+                    <th>Participants</th>
+                    <th>Items Produced</th>
+                    <th>Pockets</th>
+                    <th>Collars</th>
+                    <th>Envelopes</th>
+                    <th>Vests</th>
+                    <th>Completed Products</th>
+                    <th>Request ID</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% pastEvents.forEach(event => { %>
+                    <% if (!event.updated) { %>
+                        <tr>
+                            <td><%= event.eventid %></td>
+                            <td><%= event.pasteventdate %></td>
+                            <td><%= event.pasteventtime %></td>
+                            <td><%= event.eventduration %></td>
+                            <td><%= event.pasteventaddress %></td>
+                            <td><%= event.pasteventcity %></td>
+                            <td><%= event.pasteventstate %></td>
+                            <td><%= event.pasteventzipcode %></td>
+                            <td><%= event.pasteventparticipants %></td>
+                            <td><%= event.itemsproduced %></td>
+                            <td><%= event.pockets %></td>
+                            <td><%= event.collars %></td>
+                            <td><%= event.envelopes %></td>
+                            <td><%= event.vests %></td>
+                            <td><%= event.completedproducts %></td>
+                            <td><%= event.requestid %></td>
+                            <td><a href="/editPastEvent/<%= event.eventid %>" class="edit-button">Edit</a></td>
+                        </tr>
+                    <% } %>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <h2 class="section-title">Updated Events</h2>
+        <table class="events-table">
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Duration</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip Code</th>
+                    <th>Participants</th>
+                    <th>Items Produced</th>
+                    <th>Pockets</th>
+                    <th>Collars</th>
+                    <th>Envelopes</th>
+                    <th>Vests</th>
+                    <th>Completed Products</th>
+                    <th>Request ID</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% pastEvents.forEach(event => { %>
+                    <% if (event.updated) { %>
+                        <tr>
+                            <td><%= event.eventid %></td>
+                            <td><%= event.pasteventdate %></td>
+                            <td><%= event.pasteventtime %></td>
+                            <td><%= event.eventduration %></td>
+                            <td><%= event.pasteventaddress %></td>
+                            <td><%= event.pasteventcity %></td>
+                            <td><%= event.pasteventstate %></td>
+                            <td><%= event.pasteventzipcode %></td>
+                            <td><%= event.pasteventparticipants %></td>
+                            <td><%= event.itemsproduced %></td>
+                            <td><%= event.pockets %></td>
+                            <td><%= event.collars %></td>
+                            <td><%= event.envelopes %></td>
+                            <td><%= event.vests %></td>
+                            <td><%= event.completedproducts %></td>
+                            <td><%= event.requestid %></td>
+                            <td><a href="/editPastEvent/<%= event.eventid %>" class="edit-button">Edit</a></td>
+                        </tr>
+                    <% } %>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

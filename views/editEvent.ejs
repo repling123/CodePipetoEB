@@ -1,150 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Event</title>
-  <link rel="stylesheet" href="/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <main>
-  <h1>Edit Event</h1>
+        <main>
+    <h1>Edit Event</h1>
 
-  <form action="/editEvent/<%= event.requestid %>" method="POST">
-    <div>
-      <label for="contactfirstname">Contact First Name:</label>
-      <input
-        type="text"
-        id="contactfirstname"
-        name="contactfirstname"
-        value="<%= event.contactfirstname %>"
-        required
-      />
-    </div>
+    <form action="/editEvent/<%= event.requestid %>" method="POST">
+        <div>
+            <label for="contactfirstname">Contact First Name:</label>
+            <input
+                type="text"
+                id="contactfirstname"
+                name="contactfirstname"
+                value="<%= event.contactfirstname %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="contactlastname">Contact Last Name:</label>
-      <input
-        type="text"
-        id="contactlastname"
-        name="contactlastname"
-        value="<%= event.contactlastname %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="contactlastname">Contact Last Name:</label>
+            <input
+                type="text"
+                id="contactlastname"
+                name="contactlastname"
+                value="<%= event.contactlastname %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="contactemail">Contact Email:</label>
-      <input
-        type="email"
-        id="contactemail"
-        name="contactemail"
-        value="<%= event.contactemail %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="contactemail">Contact Email:</label>
+            <input
+                type="email"
+                id="contactemail"
+                name="contactemail"
+                value="<%= event.contactemail %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="contactnumber">Contact Number:</label>
-      <input
-        type="text"
-        id="contactnumber"
-        name="contactnumber"
-        value="<%= event.contactnumber %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="contactnumber">Contact Number:</label>
+            <input
+                type="text"
+                id="contactnumber"
+                name="contactnumber"
+                value="<%= event.contactnumber %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="eventdates">Event Date:</label>
-      <input
-        type="date"
-        id="eventdates"
-        name="eventdates"
-        value="<%= event.eventdates %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="eventdate">Event Date:</label>
+            <input
+                type="date"
+                id="eventdate"
+                name="eventdate"
+                value="<%= event.eventdate.toISOString().split('T')[0] %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="eventstarttime">Event Start Time:</label>
-      <input
-        type="time"
-        id="eventstarttime"
-        name="eventstarttime"
-        value="<%= event.eventstarttime %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="flexibledate">Flexible Date:</label>
+            <input
+                type="checkbox"
+                id="flexibledate"
+                name="flexibledate"
+                value="true"
+                <%= event.flexibledate ? 'checked' : '' %>
+            />
+        </div>
 
-    <div>
-      <label for="eventlength">Event Length (in hours):</label>
-      <input
-        type="number"
-        id="eventlength"
-        name="eventlength"
-        value="<%= event.eventlength %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="eventstarttime">Event Start Time:</label>
+            <input
+                type="time"
+                id="eventstarttime"
+                name="eventstarttime"
+                value="<%= event.eventstarttime %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="eventaddress">Event Address:</label>
-      <input
-        type="text"
-        id="eventaddress"
-        name="eventaddress"
-        value="<%= event.eventaddress %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="eventlength">Event Length (in hours):</label>
+            <input
+                type="number"
+                id="eventlength"
+                name="eventlength"
+                value="<%= event.eventlength %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="eventcity">Event City:</label>
-      <input
-        type="text"
-        id="eventcity"
-        name="eventcity"
-        value="<%= event.eventcity %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="eventaddress">Event Address:</label>
+            <input
+                type="text"
+                id="eventaddress"
+                name="eventaddress"
+                value="<%= event.eventaddress %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="eventstate">Event State:</label>
-      <input
-        type="text"
-        id="eventstate"
-        name="eventstate"
-        value="<%= event.eventstate %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="eventcity">Event City:</label>
+            <input
+                type="text"
+                id="eventcity"
+                name="eventcity"
+                value="<%= event.eventcity %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="eventzipcode">Event Zipcode:</label>
-      <input
-        type="text"
-        id="eventzipcode"
-        name="eventzipcode"
-        value="<%= event.eventzipcode %>"
-        required
-      />
-    </div>
+        <div>
+            <label for="eventstate">Event State:</label>
+            <input
+                type="text"
+                id="eventstate"
+                name="eventstate"
+                value="<%= event.eventstate %>"
+                required
+            />
+        </div>
 
-    <div>
-      <label for="estimatedattendance">Estimated Attendance:</label>
-      <input
-        type="number"
-        id="estimatedattendance"
-        name="estimatedattendance"
-        value="<%= event.estimatedattendance %>"
-      />
-    </div>
+        <div>
+            <label for="eventzipcode">Event Zipcode:</label>
+            <input
+                type="text"
+                id="eventzipcode"
+                name="eventzipcode"
+                value="<%= event.eventzipcode %>"
+                required
+            />
+        </div>
 
-    <button type="submit">Save Changes</button>
-    <a href="/eventMaintenance">Cancel</a>
-  </form>
+        <div>
+            <label for="estimatedattendance">Estimated Attendance:</label>
+            <input
+                type="number"
+                id="estimatedattendance"
+                name="estimatedattendance"
+                value="<%= event.estimatedattendance %>"
+            />
+        </div>
+
+        <div>
+            <label for="preferredactivity">Preferred Activity:</label>
+            <input
+                type="text"
+                id="preferredactivity"
+                name="preferredactivity"
+                value="<%= event.preferredactivity %>"
+            />
+        </div>
+
+        <div>
+            <label for="sufficientsewmachines">Sufficient Sewing Machines:</label>
+            <input
+                type="checkbox"
+                id="sufficientsewmachines"
+                name="sufficientsewmachines"
+                value="true"
+                <%= event.sufficientsewmachines ? 'checked' : '' %>
+            />
+        </div>
+
+        <div>
+            <label for="numsewers">Number of Sewers:</label>
+            <input
+                type="number"
+                id="numsewers"
+                name="numsewers"
+                value="<%= event.numsewers %>"
+            />
+        </div>
+
+        <div>
+            <label for="sufficienttables">Sufficient Tables:</label>
+            <input
+                type="checkbox"
+                id="sufficienttables"
+                name="sufficienttables"
+                value="true"
+                <%= event.sufficienttables ? 'checked' : '' %>
+            />
+        </div>
+
+        <div>
+            <label for="tabletype">Table Type:</label>
+            <input
+                type="text"
+                id="tabletype"
+                name="tabletype"
+                value="<%= event.tabletype %>"
+            />
+        </div>
+
+        <div>
+            <label for="jenstory">Jen's Story:</label>
+            <textarea
+                id="jenstory"
+                name="jenstory"
+            ><%= event.jenstory %></textarea>
+        </div>
+
+        <div>
+            <label for="otherinfo">Other Information:</label>
+            <textarea
+                id="otherinfo"
+                name="otherinfo"
+            ><%= event.otherinfo %></textarea>
+        </div>
+
+        <div>
+            <label for="approved">
+                <input type="checkbox" id="approved" name="approved" value="true" <%= event.approved ? 'checked' : '' %>>
+                Approved
+            </label>
+        </div>
+        
+        <button type="submit">Save Changes</button>
+        <a href="/eventMaintenance">Cancel</a>
+    </form>
 </main>
 </body>
 </html>

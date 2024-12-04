@@ -35,8 +35,6 @@ app.get('/', (req, res) => {
 });
 
 /*ADMIN LOGIN ROUTES*/
-
-
     // Serve the login landing page (loginLanding.ejs)
     app.get('/loginLanding', (req, res) => {
       res.render('loginLanding', { errorMessage: null});  // Renders 'loginLanding.ejs' file

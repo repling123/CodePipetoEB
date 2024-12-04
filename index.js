@@ -11,7 +11,7 @@ const knex = require("knex") ({
   connection : {
   host : process.env.RDS_HOSTNAME || "localhost",
   user : process.env.RDS_USERNAME || "postgres",
-  password : process.env.RDS_PASSWORD || "admin123",
+  password : process.env.RDS_PASSWORD || "sweatersanitizerhairclip",
   database : process.env.RDS_DB_NAME || "ebdb",
   port : process.env.RDS_PORT || 5432,
   ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false  // Fixed line
@@ -111,7 +111,7 @@ app.get('/', (req, res) => {
             const pendingEvents = await knex("requestedevents").where("approved", false).select("*");
             const approvedFutureEvents = await knex("requestedevents")
               .where("approved", true)
-              .andWhere("eventdate", ">", new Date())
+              .andWhere("eventdates", ">", new Date())
               .select("*");
         
             res.render("eventMaintenance", {
@@ -151,7 +151,7 @@ app.get('/', (req, res) => {
           contactlastname,
           contactemail,
           contactnumber,
-          eventdate,
+          eventdates,
           eventstarttime,
           eventlength,
           eventaddress,
@@ -169,7 +169,7 @@ app.get('/', (req, res) => {
               contactlastname,
               contactemail,
               contactnumber,
-              eventdate,
+              eventdates,
               eventstarttime,
               eventlength,
               eventaddress,
@@ -205,4 +205,4 @@ app.get('/', (req, res) => {
 
 
 // port number, (parameters) => what you want it to do.
-app.listen(PORT, () => console.log('Server started on port ' + PORT));
+app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));

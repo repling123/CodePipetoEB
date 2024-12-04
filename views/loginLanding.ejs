@@ -147,6 +147,11 @@
       background-color: #0056b3;
     }
 
+    #links ul {
+      list-style: none; /* Remove bullet points */
+      padding: 0;
+    }
+
     #links {
       margin-top: 20px;
     }
@@ -160,7 +165,7 @@
             <a href="/">Home</a>
         </nav>
       <div class="header-text">
-        <h1 class="main-title">Welcome</h1>
+        <h1 id="main-title" class="main-title">Welcome</h1>
         <p id="tagline" class="tagline">Please log in to continue.</p>
       </div>
   
@@ -180,7 +185,6 @@
           <button type="submit" class="learn-more-btn">Login</button>
         </form>
       </div>
-
   
       <!-- Links section, initially hidden -->
       <div id="links" class="hidden">
@@ -190,7 +194,6 @@
           <li><a href="/eventMaintenance" class="learn-more-btn">Event Maintenance</a></li>
         </ul>
       </div>
-
     </header>
 
     <script>

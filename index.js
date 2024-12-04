@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     });
 
     //post for login
-    app.post('/loginLanding', async (req, res) => {
+    app.post('/login', async (req, res) => {
       const { username, password } = req.body; // Extract username and password from the request body
 
       try {

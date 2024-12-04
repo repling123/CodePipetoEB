@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Maintenance</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Event Maintenance</h1>
+  
+    <h2>Past Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Event ID</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Duration</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zipcode</th>
+          <th>Participants</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pastEvents.forEach(event => { %>
+          <tr>
+            <td><%= event.eventid %></td>
+            <td><%= event.pasteventdate %></td>
+            <td><%= event.pasteventtime %></td>
+            <td><%= event.eventduration %></td>
+            <td><%= event.pasteventaddress %></td>
+            <td><%= event.pasteventcity %></td>
+            <td><%= event.pasteventstate %></td>
+            <td><%= event.pasteventzipcode %></td>
+            <td><%= event.pasteventparticipants %></td>
+            <td>
+              <a href="/editEvent/<%= event.eventid %>">Edit</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  
+    <h2>Pending Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Request ID</th>
+          <th>Contact Name</th>
+          <th>Email</th>
+          <th>Event Date</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zipcode</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pendingEvents.forEach(event => { %>
+          <tr>
+            <td><%= event.requestid %></td>
+            <td><%= event.contactfirstname %> <%= event.contactlastname %></td>
+            <td><%= event.contactemail %></td>
+            <td><%= event.eventdate %></td>
+            <td><%= event.eventaddress %></td>
+            <td><%= event.eventcity %></td>
+            <td><%= event.eventstate %></td>
+            <td><%= event.eventzipcode %></td>
+            <td>
+              <a href="/editEvent/<%= event.requestid %>">Edit</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  
+    <h2>Approved Future Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Request ID</th>
+          <th>Contact Name</th>
+          <th>Email</th>
+          <th>Event Date</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zipcode</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% approvedFutureEvents.forEach(event => { %>
+          <tr>
+            <td><%= event.requestid %></td>
+            <td><%= event.contactfirstname %> <%= event.contactlastname %></td>
+            <td><%= event.contactemail %></td>
+            <td><%= event.eventdate %></td>
+            <td><%= event.eventaddress %></td>
+            <td><%= event.eventcity %></td>
+            <td><%= event.eventstate %></td>
+            <td><%= event.eventzipcode %></td>
+            <td>
+              <a href="/editEvent/<%= event.requestid %>">Edit</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </body>
+  </html>
+  

@@ -45,12 +45,13 @@
 
     #login-box {
       max-width: 400px;
-      width: 90%; /* Make responsive for smaller screens */ /* Maybe change to 100? */
+      width: 90%; /* Make responsive for smaller screens */
       background-color: white;
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       text-align: center;
+      margin: 0 auto; /* Center the login box */
     }
 
     #login-box h2 {
@@ -66,11 +67,12 @@
     }
 
     #login-box input {
-      width: 100%;
+      width: calc(100% - 20px); /* Adjust width to fit within padding */
       padding: 10px;
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 5px;
+      box-sizing: border-box; /* Ensure padding is included in width */
     }
 
     .learn-more-btn {
@@ -153,49 +155,56 @@
 </head>
 <body>
     <header>
+        <!-- Home Button -->
+        <nav>
+            <a href="/">Home</a>
+        </nav>
       <div class="header-text">
         <h1 class="main-title">Welcome</h1>
-        <p class="tagline">Please log in to continue.</p>
+        <p id="tagline" class="tagline">Please log in to continue.</p>
       </div>
   
       <!-- Login box -->
       <div id="login-box">
-        <form id="login-form" action="/login" method="POST"> 
+        <form id="login-form" action="/login" method="POST">
           <h2>Login</h2>
   
           <!-- Error message is hidden by default -->
           <p id="error-message" class="error-message">Username or password is incorrect</p>
-  
           <label for="username">Username</label>
           <input type="text" id="username" name="username" required>
+  
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required>
+  
           <button type="submit" class="learn-more-btn">Login</button>
         </form>
       </div>
   
-      <!-- Links, hidden initially -->
+      <!-- Links section, initially hidden -->
       <div id="links" class="hidden">
-        <a href="/admin" class="learn-more-btn">Admin Maintenance</a>
-        <a href="/volunteer" class="learn-more-btn">Volunteer Maintenance</a>
-        <a href="/events" class="learn-more-btn">Event Maintenance</a>
+        <h2>Welcome back!</h2>
+        <p>View the data below:</p>
+        <ul>
+          <li><a href="/data1">Data 1</a></li>
+          <li><a href="/data2">Data 2</a></li>
+          <li><a href="/data3">Data 3</a></li>
+        </ul>
       </div>
     </header>
-  
+
     <script>
       const form = document.getElementById('login-form');
       const errorMessage = document.getElementById('error-message');
       const links = document.getElementById('links');
       const loginBox = document.getElementById('login-box');
+      const tagline = document.getElementById('tagline'); // Select the tagline element
 
-
-     form.addEventListener('submit', async (e) => {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent form submission
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-
-        console.log('Sending login request for:', { username, password }); // Add log here
 
         try {
           const response = await fetch('/login', {
@@ -205,24 +214,20 @@
           });
 
           const data = await response.json();
-          console.log('Received response:', data); // Log the response
 
           if (data.success) {
             loginBox.classList.add('hidden');
             links.classList.remove('hidden');
+            tagline.textContent = 'View the data below'; // Update the tagline text
           } else {
             errorMessage.textContent = data.message;
             errorMessage.style.display = 'block';
           }
         } catch (error) {
-          console.error('Error during login request:', error); // Log any error during the fetch request
           errorMessage.textContent = 'An unexpected error occurred.';
           errorMessage.style.display = 'block';
         }
       });
-
-
-
     </script>
-  </body>
-  </html>
+</body>
+</html>

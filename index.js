@@ -18,6 +18,9 @@ const knex = require("knex") ({
 }
 })
 
+// Middleware to parse JSON bodies
+app.use(express.json());
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 // Serve static files (CSS, images, etc.)
@@ -41,28 +44,28 @@ app.get('/', (req, res) => {
 
     //post for login
     app.post('/login', async (req, res) => {
-      const { username, password } = req.body; // Extract username and password from the request body
-
-      try {
-        // Query the database for a user with the given username and password
-        const user = await knex('AdminUsers') // Use table AdminUsers
-          .select('*')
-          .where({ username, password }) // Matches username and password directly
-          .first(); // Retrieves the first matching record
+      console.log('Received POST request for login', req.body); // Log the received data
     
-        // Check if a user was found
+      const { username, password } = req.body;
+    
+      try {
+        const user = await knex('adminusers')
+          .select('*')
+          .where({ username, password })
+          .first();
+        console.log('User fetched from DB:', user); // Log the user object fetched from DB
+    
         if (user) {
-          const success = true; // Set success to true for a valid user
-          res.json({ success, message: 'Login successful' });
+          res.json({ success: true, message: 'Login successful' });
         } else {
-          const success = false; // Set success to false for an invalid user
-          res.json({ success, message: 'Username or password is incorrect' });
+          res.json({ success: false, message: 'Username or password is incorrect' });
         }
       } catch (error) {
-        console.error(error); // Log the error for debugging purposes
+        console.error('Error during database query:', error); // Log the error during the database query
         res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
       }
     });
+    
 
     /*ADMIN MAINTENANCE ROUTES*/
       //add admin get

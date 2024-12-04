@@ -9,19 +9,6 @@
     }
 
     /* Header Styles */
-    /* header {
-      position: relative;
-      height: 100vh;
-      background: url('/Images/Home-Page-Header.jpg') no-repeat center center/cover;
-      background: url('/Images/Home-Page-Header.jpg') no-repeat center center/cover; 
-      color: rgb(255, 255, 255);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    } */
-
     header {
       position: relative;
       height: 100vh;
@@ -73,6 +60,27 @@
       font-weight: bold;
       color: #be7cf8;
     }
+
+    .highlightteal {
+      font-weight: bold;
+      color: #1b95a3;
+    }
+
+    .call-to-action {
+      line-height: 1.6; /* Improves readability */
+    }
+
+    .mission-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 90%; /* Ensures it works well on smaller screens */
+      line-height: 1.6;
+     }
+
+     .italic-text {
+      font-style: italic;
+      }
 
     .logo {
       font-family: 'Arial Black', Arial, sans-serif;
@@ -160,7 +168,7 @@
       margin-top: 20px;
       padding: 10px 20px;
       font-size: 1rem;
-      background-color: #007bff;
+      background-color: #1b95a3;
       color: white;
       text-decoration: none;
       border-radius: 5px;

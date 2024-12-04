@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Past Event</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Edit Past Event</h1>
+
+    <form action="/editPastEvent/<%= event.requestid %>" method="POST">
+      <div>
+        <label for="pasteventdate">Past Event Date:</label>
+        <input
+          type="date"
+          id="pasteventdate"
+          name="pasteventdate"
+          value="<%= event.pasteventdate.toISOString().split('T')[0] %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pasteventtime">Past Event Time:</label>
+        <input
+          type="time"
+          id="pasteventtime"
+          name="pasteventtime"
+          value="<%= event.pasteventtime %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="eventdurationhours">Event Duration (in hours):</label>
+        <input
+          type="number"
+          id="eventdurationhours"
+          name="eventdurationhours"
+          value="<%= event.eventdurationhours %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pasteventaddress">Past Event Address:</label>
+        <input
+          type="text"
+          id="pasteventaddress"
+          name="pasteventaddress"
+          value="<%= event.pasteventaddress %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pasteventcity">Past Event City:</label>
+        <input
+          type="text"
+          id="pasteventcity"
+          name="pasteventcity"
+          value="<%= event.pasteventcity %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pasteventstate">Past Event State:</label>
+        <input
+          type="text"
+          id="pasteventstate"
+          name="pasteventstate"
+          value="<%= event.pasteventstate %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pasteventzipcode">Past Event Zip Code:</label>
+        <input
+          type="text"
+          id="pasteventzipcode"
+          name="pasteventzipcode"
+          value="<%= event.pasteventzipcode %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pasteventparticipants">Past Event Participants:</label>
+        <input
+          type="number"
+          id="pasteventparticipants"
+          name="pasteventparticipants"
+          value="<%= event.pasteventparticipants %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="itemsproduced">Items Produced:</label>
+        <input
+          type="number"
+          id="itemsproduced"
+          name="itemsproduced"
+          value="<%= event.itemsproduced %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="pockets">Pockets:</label>
+        <input
+          type="number"
+          id="pockets"
+          name="pockets"
+          value="<%= event.pockets %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="collars">Collars:</label>
+        <input
+          type="number"
+          id="collars"
+          name="collars"
+          value="<%= event.collars %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="envelopes">Envelopes:</label>
+        <input
+          type="number"
+          id="envelopes"
+          name="envelopes"
+          value="<%= event.envelopes %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="vests">Vests:</label>
+        <input
+          type="number"
+          id="vests"
+          name="vests"
+          value="<%= event.vests %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="completedproducts">Completed Products:</label>
+        <input
+          type="number"
+          id="completedproducts"
+          name="completedproducts"
+          value="<%= event.completedproducts %>"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="updated">
+          <input type="checkbox" id="updated" name="updated" value="true" <%= event.updated ? 'checked' : '' %>>
+          Updated
+        </label>
+      </div>
+      
+      <button type="submit">Save Changes</button>
+      <a href="/eventPastMaintenance">Cancel</a>
+    </form>
+  </main>
+</body>
+</html>

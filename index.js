@@ -9,10 +9,18 @@ app.use(express.urlencoded( {extended: true} ));
 const knex = require("knex") ({
   client : "pg",
   connection : {
-  host : process.env.RDS_HOSTNAME || "localhost",
-  user : process.env.RDS_USERNAME || "postgres",
-  password : process.env.RDS_PASSWORD || "admin123",
-  database : process.env.RDS_DB_NAME || "ebdb",
+  host : process.env.RDS_HOSTNAME || 
+  // "awseb-e-3zkyhjrvkh-stack-awsebrdsdatabase-uvmpb6v1jjeb.cf6qyccwqo8c.us-east-1.rds.amazonaws.com",
+  "localhost",
+  user : process.env.RDS_USERNAME || 
+  // "ebroot",
+  "postgres",
+  password : process.env.RDS_PASSWORD || 
+  // "sqldatabase9128",
+  "sweatersanitizerhairclip",
+  database : process.env.RDS_DB_NAME || 
+  "deletelater",
+  // "ebdb",
   port : process.env.RDS_PORT || 5432,
   ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false  // Fixed line
 }
@@ -157,68 +165,59 @@ app.post('/editAdmin/:id', async (req, res) => {
       //add event post 
       
       
-      // Route to display the eventMaintenance page
-
-        app.get("/eventMaintenance", async (req, res) => {
-          try {
-            const pastEvents = await knex("pastevents").select("*");
-            const pendingEvents = await knex("requestedevents").where("approved", false).select("*");
-            const approvedFutureEvents = await knex("requestedevents")
-              .where("approved", true)
-              .andWhere("eventdate", ">", new Date())
-              .select("*");
-        
-            res.render("eventMaintenance", {
-              pastEvents,
-              pendingEvents,
-              approvedFutureEvents,
-            });
-          } catch (error) {
-            console.error(error);
-            res.status(500).send("Error retrieving events from the database.");
-          }
-        });
-        
-      //edit event get
-      // Route to display the edit event form
-      app.get('/editEvent/:id', async (req, res) => {
-        const { id } = req.params;
-      
+      // Route to render the eventMaintenance page
+      app.get('/eventMaintenance', async (req, res) => {
         try {
-          const event = await knex('requestedevents').where({ requestid: id }).first(); // Adjust column names if needed
-          if (!event) {
-            return res.status(404).send('Event not found');
-          }
-          res.render('editEvent', { event });
-        } catch (error) {
-          console.error(error);
-          res.status(500).send('Server error');
+          // Fetch pending events
+          const pendingEvents = await knex('requestedevents')
+        .select('*')
+        .where({ approved: false })
+        .orderBy('requestid', 'desc');
+
+          // Fetch approved future events
+          const approvedFutureEvents = await knex('requestedevents')
+        .select('*')
+        .where({ approved: true })
+        .andWhere('eventdate', '>=', knex.fn.now())
+        .orderBy('requestid', 'desc');
+
+          res.render('eventMaintenance', { pendingEvents, approvedFutureEvents });
+        } catch (err) {
+          console.error('Error fetching events:', err);
+          res.status(500).send('Error fetching events.');
         }
       });
       
-      //edit event post
-      // Route to handle the update of an event
-      app.post('/editEvent/:id', async (req, res) => {
-        const { id } = req.params;
-        const {
-          contactfirstname,
-          contactlastname,
-          contactemail,
-          contactnumber,
-          eventdate,
-          eventstarttime,
-          eventlength,
-          eventaddress,
-          eventcity,
-          eventstate,
-          eventzipcode,
-          estimatedattendance,
-        } = req.body;
       
+        
+      //edit event get
+      // GET route to fetch a specific event for editing
+      app.get('/editEvent/:id', async (req, res) => {
+        const { id } = req.params;
         try {
-          await knex('requestedevents')
-            .where({ requestid: id })
-            .update({
+          // Fetch the specific event by ID
+          const event = await knex('requestedevents')
+        .select('*')
+        .where({ requestid: id })
+        .first();
+
+          if (!event) {
+        return res.status(404).send('Event not found.');
+          }
+
+          res.render('editEvent', { event });
+        } catch (err) {
+          console.error('Error fetching event for editing:', err);
+          res.status(500).send('Error fetching event for editing.');
+        }
+      });
+
+            // POST route to update a specific event
+            app.post('/editEvent/:id', async (req, res) => {
+            const { id } = req.params;
+
+            // Extract form data and handle the approved checkbox
+            const {
               contactfirstname,
               contactlastname,
               contactemail,
@@ -231,18 +230,175 @@ app.post('/editAdmin/:id', async (req, res) => {
               eventstate,
               eventzipcode,
               estimatedattendance,
+              preferredactivity,
+              numsewers,
+              tabletype,
+              otherinfo,
+            } = req.body;
+
+            const approved = req.body.approved === 'true'; // Handle checkbox as boolean
+            const flexibledate = req.body.flexibledate === 'true'; // Handle checkbox as boolean
+            const sufficientsewmachines = req.body.sufficientsewmachines === 'true'; // Handle checkbox as boolean
+            const sufficienttables = req.body.sufficienttables === 'true'; // Handle checkbox as boolean
+            const jenstory = req.body.jenstory === 'true'; // Handle checkbox as boolean
+
+            try {
+              // Update the event in the database
+              await knex('requestedevents')
+              .where({ requestid: id })
+              .update({
+                contactfirstname,
+                contactlastname,
+                contactemail,
+                contactnumber,
+                eventdate,
+                eventstarttime,
+                eventlength,
+                eventaddress,
+                eventcity,
+                eventstate,
+                eventzipcode,
+                estimatedattendance,
+                preferredactivity,
+                flexibledate,
+                sufficientsewmachines,
+                numsewers,
+                sufficienttables,
+                tabletype,
+                jenstory,
+                otherinfo,
+                approved,
+              });
+
+              res.redirect('/eventMaintenance'); // Redirect back to event maintenance page
+            } catch (err) {
+              console.error('Error updating event:', err);
+              res.status(500).send('Error updating event.');
+            }
             });
-      
-          res.redirect('/eventMaintenance');
-        } catch (error) {
-          console.error(error);
-          res.status(500).send('Server error');
-        }
-      });
-      
 
 
       //delete event
+      // POST route to delete a specific event
+    
+      app.post('/deleteEvent/:id', async (req, res) => {
+        const id = req.params.id;
+        try {
+          // Delete the record in requestedevents table
+          await knex('requestedevents')
+            .where('requestid', id)
+            .del();
+
+          res.redirect('/eventMaintenance'); // Redirect to the event maintenance page after deletion
+        } catch (error) {
+          console.error('Error deleting event:', error);
+          res.status(500).send('Internal Server Error');
+        }
+      });
+
+      //eventPastMaintenance routes
+      // Route to render the past events maintenance page
+      app.get('/eventPastMaintenance', async (req, res) => {
+        try {
+          // Fetch past events
+          const pastEvents = await knex('pastevents').select('*')
+          .orderBy('eventid', 'desc');
+          res.render('eventPastMaintenance', { pastEvents });
+        } catch (err) {
+          console.error('Error fetching past events:', err);
+          res.status(500).send('Error fetching past events.');
+        }
+      });
+
+
+      //editPastEvent routes
+      // GET route to fetch a specific past event for editing
+      app.get('/editPastEvent/:id', async (req, res) => {
+        const { id } = req.params;
+        try {
+          // Fetch the specific past event by ID
+          const event = await knex('pastevents')
+            .select('*')
+            .where({ eventid: id })
+            .first();
+
+          if (!event) {
+            return res.status(404).send('Past event not found.');
+          }
+
+          res.render('editPastEvent', { event });
+        } catch (err) {
+          console.error('Error fetching past event for editing:', err);
+          res.status(500).send('Error fetching past event for editing.');
+        }
+      });
+
+      // POST route to update a specific past event
+      app.post('/editPastEvent/:id', async (req, res) => {
+        const { id } = req.params;
+        const {
+          pasteventdate,
+          pasteventtime,
+          eventdurationhours,
+          pasteventaddress,
+          pasteventcity,
+          pasteventstate,
+          pasteventzipcode,
+          pasteventparticipants,
+          itemsproduced,
+          pockets,
+          collars,
+          envelopes,
+          vests,
+          completedproducts,
+          updated,
+        } = req.body;
+
+        try {
+          // Update the past event in the database
+          await knex('pastevents')
+        .where({ eventid: id })
+        .update({
+          pasteventdate,
+          pasteventtime,
+          eventdurationhours,
+          pasteventaddress,
+          pasteventcity,
+          pasteventstate,
+          pasteventzipcode,
+          pasteventparticipants,
+          itemsproduced,
+          pockets,
+          collars,
+          envelopes,
+          vests,
+          completedproducts,
+          updated: updated === 'true',
+        });
+
+          res.redirect('/eventPastMaintenance'); // Redirect back to past events maintenance page
+        } catch (err) {
+          console.error('Error updating past event:', err);
+          res.status(500).send('Error updating past event.');
+        }
+      });
+
+
+      // POST route to delete a specific past event
+      app.post('/deletePastEvent/:id', async (req, res) => {
+        const id = req.params.id;
+        try {
+          // Delete the record in pastevents table
+          await knex('pastevents')
+            .where('eventid', id)
+            .del();
+
+          res.redirect('/eventPastMaintenance'); // Redirect to the past events maintenance page after deletion
+        } catch (error) {
+          console.error('Error deleting past event:', error);
+          res.status(500).send('Internal Server Error');
+        }
+      });
 
 
 /*HOW CAN I HELP ROUTES*/
@@ -259,4 +415,4 @@ app.post('/editAdmin/:id', async (req, res) => {
 
 
 // port number, (parameters) => what you want it to do.
-app.listen(PORT, () => console.log('Server started on port ' + PORT));
+app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));

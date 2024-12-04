@@ -206,11 +206,14 @@
         </div>
 
         <div>
-            <label for="jenstory">Jen's Story:</label>
-            <textarea
+            <label for="jenstory">Jenn Story:</label>
+            <input
+                type="checkbox"
                 id="jenstory"
                 name="jenstory"
-            ><%= event.jenstory %></textarea>
+                value="true"
+                <%= event.jenstory ? 'checked' : '' %>
+            />
         </div>
 
         <div>

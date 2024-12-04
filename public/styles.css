@@ -6,6 +6,7 @@
       color: rgb(255, 255, 255);
       overflow-x: hidden;
       max-width: 100%;
+      scroll-behavior: smooth;
     }
 
     /* Header Styles */
@@ -65,6 +66,25 @@
       font-weight: bold;
       color: #1b95a3;
     }
+
+    .edit-button {
+      background-color: #1b95a3;
+      color: white;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-radius: 3px;
+  }
+
+  .top-right-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #1b95a3;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
 
     .call-to-action {
       line-height: 1.6; /* Improves readability */

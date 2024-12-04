@@ -98,7 +98,7 @@
     }
 
     #landing-page ul {
-      list-style: none;
+      list-style: none; /* Remove bullet points */
       padding: 0;
     }
 
@@ -182,11 +182,11 @@
       </div>
   
       <!-- Links section, initially hidden -->
-      <div id="links" class="learn-more-btn">
+      <div id="links" class="hidden">
         <ul>
-          <li><a href="/adminMaintenece">Admin Maintenence</a></li>
-          <li><a href="/volunteerMaintenence">Volunteer Maintenence</a></li>
-          <li><a href="/eventMaintenence">Event Maintenence</a></li>
+          <li><a href="/adminMaintenece" class="learn-more-btn">Admin Maintenance</a></li>
+          <li><a href="/volunteerMaintenece" class="learn-more-btn">Volunteer Maintenance</a></li>
+          <li><a href="/eventMaintenece" class="learn-more-btn">Event Maintenance</a></li>
         </ul>
       </div>
     </header>
@@ -197,6 +197,7 @@
       const links = document.getElementById('links');
       const loginBox = document.getElementById('login-box');
       const tagline = document.getElementById('tagline'); // Select the tagline element
+      const mainTitle = document.getElementById('main-title'); // Select the main title element
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent form submission
@@ -217,6 +218,7 @@
             loginBox.classList.add('hidden');
             links.classList.remove('hidden');
             tagline.textContent = 'View the data below'; // Update the tagline text
+            mainTitle.textContent = 'Welcome back'; // Update the main title text
           } else {
             errorMessage.textContent = data.message;
             errorMessage.style.display = 'block';

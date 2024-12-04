@@ -91,22 +91,11 @@ app.get('/', (req, res) => {
     app.post('/addAdmin', async (req, res) => {
       const { username, password } = req.body;
       try {
-        await pool.query('INSERT INTO adminusers (Username, Password) VALUES ($1, $2)', [username, password]);
+        await pool.query('INSERT INTO adminusers (username, password) VALUES ($1, $2)', [username, password]);
         res.redirect('/admin');
       } catch (error) {
         console.error('Error adding admin user:', error);
         res.status(500).send('Error adding admin user.');
-      }
-    });
-
-    // Route to edit an admin (GET)
-    app.get('/admin', async (req, res) => {
-      try {
-        const result = await pool.query('SELECT * FROM adminusers');
-        res.render('adminMaintenance', { adminusers: result.rows });
-      } catch (error) {
-        console.error('Error fetching admin users:', error);
-        res.status(500).send('Error fetching admin users.');
       }
     });
 
@@ -115,7 +104,7 @@ app.get('/', (req, res) => {
     const { id } = req.params;
     const { username, password } = req.body;
     try {
-      await pool.query('UPDATE adminusers SET Username = $1, Password = $2 WHERE UserID = $3', [username, password, id]);
+      await pool.query('UPDATE adminusers SET username = $1, password = $2 WHERE userid = $3', [username, password, id]);
       res.redirect('/admin');
     } catch (error) {
       console.error('Error updating admin user:', error);
@@ -127,7 +116,7 @@ app.get('/', (req, res) => {
   app.delete('/deleteAdmin/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      await pool.query('DELETE FROM adminusers WHERE UserID = $1', [id]);
+      await pool.query('DELETE FROM adminusers WHERE user = $1', [id]);
       res.json({ success: true });
     } catch (error) {
       console.error('Error deleting admin user:', error);

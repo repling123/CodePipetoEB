@@ -78,11 +78,11 @@
       <tbody>
         <% adminusers.forEach(function(user) { %>
           <tr>
-            <td><%= user.UserID %></td>
-            <td><%= user.Username %></td>
+            <td><%= user.userid %></td>
+            <td><%= user.username %></td>
             <td>
-              <a href="/editAdmin/<%= user.UserID %>" class="btn btn-edit">Edit</a>
-              <button class="btn btn-danger" onclick="confirmDelete(<%= user.UserID %>)">Delete</button>
+              <a href="/editAdmin/<%= user.userid %>" class="btn btn-edit">Edit</a>
+              <button class="btn btn-danger" onclick="confirmDelete('<%= user.userid %>')">Delete</button>
             </td>
           </tr>
         <% }); %>

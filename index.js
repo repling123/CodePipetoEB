@@ -103,10 +103,89 @@ app.get('/', (req, res) => {
       //add event post 
       
       
+      // Route to display the eventMaintenance page
+
+        app.get("/eventMaintenance", async (req, res) => {
+          try {
+            const pastEvents = await knex("pastevents").select("*");
+            const pendingEvents = await knex("requestedevents").where("approved", false).select("*");
+            const approvedFutureEvents = await knex("requestedevents")
+              .where("approved", true)
+              .andWhere("eventdate", ">", new Date())
+              .select("*");
+        
+            res.render("eventMaintenance", {
+              pastEvents,
+              pendingEvents,
+              approvedFutureEvents,
+            });
+          } catch (error) {
+            console.error(error);
+            res.status(500).send("Error retrieving events from the database.");
+          }
+        });
+        
       //edit event get
-
-
+      // Route to display the edit event form
+      app.get('/editEvent/:id', async (req, res) => {
+        const { id } = req.params;
+      
+        try {
+          const event = await knex('requestedevents').where({ requestid: id }).first(); // Adjust column names if needed
+          if (!event) {
+            return res.status(404).send('Event not found');
+          }
+          res.render('editEvent', { event });
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('Server error');
+        }
+      });
+      
       //edit event post
+      // Route to handle the update of an event
+      app.post('/editEvent/:id', async (req, res) => {
+        const { id } = req.params;
+        const {
+          contactfirstname,
+          contactlastname,
+          contactemail,
+          contactnumber,
+          eventdate,
+          eventstarttime,
+          eventlength,
+          eventaddress,
+          eventcity,
+          eventstate,
+          eventzipcode,
+          estimatedattendance,
+        } = req.body;
+      
+        try {
+          await knex('requestedevents')
+            .where({ requestid: id })
+            .update({
+              contactfirstname,
+              contactlastname,
+              contactemail,
+              contactnumber,
+              eventdate,
+              eventstarttime,
+              eventlength,
+              eventaddress,
+              eventcity,
+              eventstate,
+              eventzipcode,
+              estimatedattendance,
+            });
+      
+          res.redirect('/eventMaintenance');
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('Server error');
+        }
+      });
+      
 
 
       //delete event

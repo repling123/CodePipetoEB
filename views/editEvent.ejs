@@ -5,233 +5,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Event</title>
     <link rel="stylesheet" href="/styles.css">
+
+<style>
+    form {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  input[type="radio"] {
+    width: auto;
+    margin-right: 5px;
+  }
+</style>
+
 </head>
 <body>
-        <main>
-    <h1>Edit Event</h1>
+    <main>
+        <h1>Edit Event</h1>
+        <form action="/editEvent/<%= event.requestid %>" method="POST">
+            <div class="form-group">
+                <label for="contactfirstname">Contact First Name:</label>
+                <input type="text" id="contactfirstname" name="contactfirstname" value="<%= event.contactfirstname %>" required />
+            </div>
 
-    <form action="/editEvent/<%= event.requestid %>" method="POST">
-        <div>
-            <label for="contactfirstname">Contact First Name:</label>
-            <input
-                type="text"
-                id="contactfirstname"
-                name="contactfirstname"
-                value="<%= event.contactfirstname %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="contactlastname">Contact Last Name:</label>
+                <input type="text" id="contactlastname" name="contactlastname" value="<%= event.contactlastname %>" required />
+            </div>
 
-        <div>
-            <label for="contactlastname">Contact Last Name:</label>
-            <input
-                type="text"
-                id="contactlastname"
-                name="contactlastname"
-                value="<%= event.contactlastname %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="contactemail">Contact Email:</label>
+                <input type="email" id="contactemail" name="contactemail" value="<%= event.contactemail %>" required />
+            </div>
 
-        <div>
-            <label for="contactemail">Contact Email:</label>
-            <input
-                type="email"
-                id="contactemail"
-                name="contactemail"
-                value="<%= event.contactemail %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="contactnumber">Contact Phone Number:</label>
+                <input type="text" id="contactnumber" name="contactnumber" value="<%= event.contactnumber %>" required />
+            </div>
 
-        <div>
-            <label for="contactnumber">Contact Phone Number:</label>
-            <input
-                type="text"
-                id="contactnumber"
-                name="contactnumber"
-                value="<%= event.contactnumber %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventdate">Event Date:</label>
+                <input type="date" id="eventdate" name="eventdate" value="<%= event.eventdate.toISOString().split('T')[0] %>" required />
+            </div>
 
-        <div>
-            <label for="eventdate">Event Date:</label>
-            <input
-                type="date"
-                id="eventdate"
-                name="eventdate"
-                value="<%= event.eventdate.toISOString().split('T')[0] %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="flexibledate">Flexible Date:</label>
+                <input type="checkbox" id="flexibledate" name="flexibledate" value="true" <%= event.flexibledate ? 'checked' : '' %> />
+            </div>
 
-        <div>
-            <label for="flexibledate">Flexible Date:</label>
-            <input
-                type="checkbox"
-                id="flexibledate"
-                name="flexibledate"
-                value="true"
-                <%= event.flexibledate ? 'checked' : '' %>
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventstarttime">Event Start Time:</label>
+                <input type="time" id="eventstarttime" name="eventstarttime" value="<%= event.eventstarttime %>" required />
+            </div>
 
-        <div>
-            <label for="eventstarttime">Event Start Time:</label>
-            <input
-                type="time"
-                id="eventstarttime"
-                name="eventstarttime"
-                value="<%= event.eventstarttime %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventlength">Event Length (in hours):</label>
+                <input type="number" id="eventlength" name="eventlength" value="<%= event.eventlength %>" required />
+            </div>
 
-        <div>
-            <label for="eventlength">Event Length (in hours):</label>
-            <input
-                type="number"
-                id="eventlength"
-                name="eventlength"
-                value="<%= event.eventlength %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventaddress">Event Address:</label>
+                <input type="text" id="eventaddress" name="eventaddress" value="<%= event.eventaddress %>" required />
+            </div>
 
-        <div>
-            <label for="eventaddress">Event Address:</label>
-            <input
-                type="text"
-                id="eventaddress"
-                name="eventaddress"
-                value="<%= event.eventaddress %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventcity">Event City:</label>
+                <input type="text" id="eventcity" name="eventcity" value="<%= event.eventcity %>" required />
+            </div>
 
-        <div>
-            <label for="eventcity">Event City:</label>
-            <input
-                type="text"
-                id="eventcity"
-                name="eventcity"
-                value="<%= event.eventcity %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventstate">Event State:</label>                                
+        <select id="eventstate" name="eventstate" required>
+            <option value="AK" <%= event.eventstate === 'AK' ? 'selected' : '' %>>Alaska</option>
+            <option value="AZ" <%= event.eventstate === 'AZ' ? 'selected' : '' %>>Arizona</option>
+            <option value="AR" <%= event.eventstate === 'AR' ? 'selected' : '' %>>Arkansas</option>
+            <option value="CA" <%= event.eventstate === 'CA' ? 'selected' : '' %>>California</option>
+            <option value="CO" <%= event.eventstate === 'CO' ? 'selected' : '' %>>Colorado</option>
+            <option value="CT" <%= event.eventstate === 'CT' ? 'selected' : '' %>>Connecticut</option>
+            <option value="DE" <%= event.eventstate === 'DE' ? 'selected' : '' %>>Delaware</option>
+            <option value="FL" <%= event.eventstate === 'FL' ? 'selected' : '' %>>Florida</option>
+            <option value="GA" <%= event.eventstate === 'GA' ? 'selected' : '' %>>Georgia</option>
+            <option value="HI" <%= event.eventstate === 'HI' ? 'selected' : '' %>>Hawaii</option>
+            <option value="ID" <%= event.eventstate === 'ID' ? 'selected' : '' %>>Idaho</option>
+            <option value="IL" <%= event.eventstate === 'IL' ? 'selected' : '' %>>Illinois</option>
+            <option value="IN" <%= event.eventstate === 'IN' ? 'selected' : '' %>>Indiana</option>
+            <option value="IA" <%= event.eventstate === 'IA' ? 'selected' : '' %>>Iowa</option>
+            <option value="KS" <%= event.eventstate === 'KS' ? 'selected' : '' %>>Kansas</option>
+            <option value="KY" <%= event.eventstate === 'KY' ? 'selected' : '' %>>Kentucky</option>
+            <option value="LA" <%= event.eventstate === 'LA' ? 'selected' : '' %>>Louisiana</option>
+            <option value="ME" <%= event.eventstate === 'ME' ? 'selected' : '' %>>Maine</option>
+            <option value="MD" <%= event.eventstate === 'MD' ? 'selected' : '' %>>Maryland</option>
+            <option value="MA" <%= event.eventstate === 'MA' ? 'selected' : '' %>>Massachusetts</option>
+            <option value="MI" <%= event.eventstate === 'MI' ? 'selected' : '' %>>Michigan</option>
+            <option value="MN" <%= event.eventstate === 'MN' ? 'selected' : '' %>>Minnesota</option>
+            <option value="MS" <%= event.eventstate === 'MS' ? 'selected' : '' %>>Mississippi</option>
+            <option value="MO" <%= event.eventstate === 'MO' ? 'selected' : '' %>>Missouri</option>
+            <option value="MT" <%= event.eventstate === 'MT' ? 'selected' : '' %>>Montana</option>
+            <option value="NE" <%= event.eventstate === 'NE' ? 'selected' : '' %>>Nebraska</option>
+            <option value="NV" <%= event.eventstate === 'NV' ? 'selected' : '' %>>Nevada</option>
+            <option value="NH" <%= event.eventstate === 'NH' ? 'selected' : '' %>>New Hampshire</option>
+            <option value="NJ" <%= event.eventstate === 'NJ' ? 'selected' : '' %>>New Jersey</option>
+            <option value="NM" <%= event.eventstate === 'NM' ? 'selected' : '' %>>New Mexico</option>
+            <option value="NY" <%= event.eventstate === 'NY' ? 'selected' : '' %>>New York</option>
+            <option value="NC" <%= event.eventstate === 'NC' ? 'selected' : '' %>>North Carolina</option>
+            <option value="ND" <%= event.eventstate === 'ND' ? 'selected' : '' %>>North Dakota</option>
+            <option value="OH" <%= event.eventstate === 'OH' ? 'selected' : '' %>>Ohio</option>
+            <option value="OK" <%= event.eventstate === 'OK' ? 'selected' : '' %>>Oklahoma</option>
+            <option value="OR" <%= event.eventstate === 'OR' ? 'selected' : '' %>>Oregon</option>
+            <option value="PA" <%= event.eventstate === 'PA' ? 'selected' : '' %>>Pennsylvania</option>
+            <option value="RI" <%= event.eventstate === 'RI' ? 'selected' : '' %>>Rhode Island</option>
+            <option value="SC" <%= event.eventstate === 'SC' ? 'selected' : '' %>>South Carolina</option>
+            <option value="SD" <%= event.eventstate === 'SD' ? 'selected' : '' %>>South Dakota</option>
+            <option value="TN" <%= event.eventstate === 'TN' ? 'selected' : '' %>>Tennessee</option>
+            <option value="TX" <%= event.eventstate === 'TX' ? 'selected' : '' %>>Texas</option>
+            <option value="UT" <%= event.eventstate === 'UT' ? 'selected' : '' %>>Utah</option>
+            <option value="VT" <%= event.eventstate === 'VT' ? 'selected' : '' %>>Vermont</option>
+            <option value="VA" <%= event.eventstate === 'VA' ? 'selected' : '' %>>Virginia</option>
+            <option value="WA" <%= event.eventstate === 'WA' ? 'selected' : '' %>>Washington</option>
+            <option value="WV" <%= event.eventstate === 'WV' ? 'selected' : '' %>>West Virginia</option>
+            <option value="WI" <%= event.eventstate === 'WI' ? 'selected' : '' %>>Wisconsin</option>
+            <option value="WY" <%= event.eventstate === 'WY' ? 'selected' : '' %>>Wyoming</option>
+        </select>
 
-        <div>
-            <label for="eventstate">Event State:</label>
-            <input
-                type="text"
-                id="eventstate"
-                name="eventstate"
-                value="<%= event.eventstate %>"
-                required
-            />
-        </div>
+            </div>
 
-        <div>
-            <label for="eventzipcode">Event Zipcode:</label>
-            <input
-                type="text"
-                id="eventzipcode"
-                name="eventzipcode"
-                value="<%= event.eventzipcode %>"
-                required
-            />
-        </div>
+            <div class="form-group">
+                <label for="eventzipcode">Event Zipcode:</label>
+                <input type="text" id="eventzipcode" name="eventzipcode" value="<%= event.eventzipcode %>" required />
+            </div>
 
-        <div>
-            <label for="estimatedattendance">Estimated Attendance:</label>
-            <input
-                type="number"
-                id="estimatedattendance"
-                name="estimatedattendance"
-                value="<%= event.estimatedattendance %>"
-            />
-        </div>
+            <div class="form-group">
+                <label for="estimatedattendance">Estimated Attendance:</label>
+                <input type="number" id="estimatedattendance" name="estimatedattendance" value="<%= event.estimatedattendance %>" />
+            </div>
 
-        <div>
-            <label for="preferredactivity">Preferred Activity:</label>
-            <select id="preferredactivity" name="preferredactivity">
-              <% preferredActivities.forEach(activity => { %>
-                <option value="<%= activity.preferredactivity %>"><%= activity.preferredactivity %></option>
-              <% }) %>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="preferredactivity">Preferred Activity:</label>
+                <select id="preferredactivity" name="preferredactivity">
+                    <% preferredActivities.forEach(activity => { %>
+                        <option value="<%= activity.preferredactivity %>"><%= activity.preferredactivity %></option>
+                    <% }) %>
+                </select>
+            </div>
 
-        <div>
-            <label for="sufficientsewmachines">Sufficient Sewing Machines:</label>
-            <input
-                type="checkbox"
-                id="sufficientsewmachines"
-                name="sufficientsewmachines"
-                value="true"
-                <%= event.sufficientsewmachines ? 'checked' : '' %>
-            />
-        </div>
+            <div class="form-group">
+                <label for="sufficientsewmachines">Sufficient Sewing Machines:</label>
+                <input type="checkbox" id="sufficientsewmachines" name="sufficientsewmachines" value="true" <%= event.sufficientsewmachines ? 'checked' : '' %> />
+            </div>
 
-        <div>
-            <label for="numsewers">Number of Sewers:</label>
-            <input
-                type="number"
-                id="numsewers"
-                name="numsewers"
-                value="<%= event.numsewers %>"
-            />
-        </div>
+            <div class="form-group">
+                <label for="numsewers">Number of Sewers:</label>
+                <input type="number" id="numsewers" name="numsewers" value="<%= event.numsewers %>" />
+            </div>
 
-        <div>
-            <label for="sufficienttables">Sufficient Tables:</label>
-            <input
-                type="checkbox"
-                id="sufficienttables"
-                name="sufficienttables"
-                value="true"
-                <%= event.sufficienttables ? 'checked' : '' %>
-            />
-        </div>
-    
-        <div>
-            <label for="tabletype">Table Type:</label>
-            <select id="tabletype" name="tabletype">
-              <% tableTypes.forEach(activity => { %>
-                <option value="<%= activity.tabletype %>"><%= activity.tabletype %></option>
-              <% }) %>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="sufficienttables">Sufficient Tables:</label>
+                <input type="checkbox" id="sufficienttables" name="sufficienttables" value="true" <%= event.sufficienttables ? 'checked' : '' %> />
+            </div>
 
-        <div>
-            <label for="jenstory">Jen Story:</label>
-            <input
-                type="checkbox"
-                id="jenstory"
-                name="jenstory"
-                value="true"
-                <%= event.jenstory ? 'checked' : '' %>
-            />
-        </div>
+            <div class="form-group">
+                <label for="tabletype">Table Type:</label>
+                <select id="tabletype" name="tabletype">
+                    <% tableTypes.forEach(activity => { %>
+                        <option value="<%= activity.tabletype %>"><%= activity.tabletype %></option>
+                    <% }) %>
+                </select>
+            </div>
 
-        <div>
-            <label for="otherinfo">Other Information:</label>
-            <textarea
-                id="otherinfo"
-                name="otherinfo"
-            ><%= event.otherinfo %></textarea>
-        </div>
+            <div class="form-group">
+                <label for="jenstory">Jen Story:</label>
+                <input type="checkbox" id="jenstory" name="jenstory" value="true" <%= event.jenstory ? 'checked' : '' %> />
+            </div>
 
-        <div>
-            <label for="approved">
-                <input type="checkbox" id="approved" name="approved" value="true" <%= event.approved ? 'checked' : '' %>>
-                Approved
-            </label>
-        </div>
-        
-        <button type="submit">Save Changes</button>
-        <a href="/eventMaintenance">Cancel</a>
-    </form>
-</main>
+            <div class="form-group">
+                <label for="otherinfo">Other Information:</label>
+                <textarea id="otherinfo" name="otherinfo"><%= event.otherinfo %></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="approved">
+                    <input type="checkbox" id="approved" name="approved" value="true" <%= event.approved ? 'checked' : '' %>> Approved
+                </label>
+            </div>
+            
+            <button class="edit-button" type="submit">Save Changes</button>
+            <a class="delete-button" href="/eventMaintenance">Cancel</a>
+        </form>
+    </main>
 </body>
 </html>

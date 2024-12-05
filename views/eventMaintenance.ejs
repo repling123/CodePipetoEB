@@ -32,6 +32,9 @@
         <h1>Event Maintenance</h1>
 
         <h2>Pending Event Requests</h2>
+        <form action="/addEvent" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
+            <button class="edit-button" type="submit">Add Event</button>
+          </form>
         <div class="table-container">
             <table>
                 <thead>
@@ -100,13 +103,14 @@
                 </tbody>
             </table>
 
-            <form action="/addEvent" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
-                <button class="edit-button" type="submit">Add Event</button>
-              </form>
+            
 
         </div>
 
         <h2>Approved Future Events</h2>
+        <form action="/addEvent" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
+            <button class="edit-button" type="submit">Add Event</button>
+          </form>
         <div class="table-container">
             <table>
                 <thead>
@@ -174,11 +178,7 @@
                     <% }) %>
                 </tbody>
             </table>
-            <form action="/addEvent" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
-                <button class="edit-button" type="submit">Add Event</button>
-              </form>
-
-        </div>
+           </div>
     </main>
 </body>
 </html>

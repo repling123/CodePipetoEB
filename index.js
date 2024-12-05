@@ -71,10 +71,10 @@ app.use('/Images', express.static(path.join(__dirname, 'Images')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Middleware for Authentication
+// Middleware for Authentication using Cookies
 function isAuthenticated(req, res, next) {
-  if (req.session.userId) {
-    next(); // User is logged in
+  if (req.cookies.security === 'true') {
+    next(); // Allow access if the security cookie is set to true
   } else {
     res.redirect('/loginLanding'); // Redirect to login page
   }
@@ -123,14 +123,8 @@ app.post('/login', async (req, res) => {
 
 // Logout Route
 app.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error destroying session:', err);
-      res.status(500).send('Error logging out.');
-    } else {
-      res.redirect('/loginLanding');
-    }
-  });
+  res.clearCookie('security'); // Clear the security cookie
+  res.redirect('/loginLanding'); // Redirect to login
 });
 
 // Admin Maintenance Page (Protected)

@@ -1,5 +1,6 @@
 let express = require('express');
 let app = express();
+const session = require('express-session'); // Import express-session
 let path = require('path');
 const PORT = process.env.PORT || 3000
 // grab html form from file 
@@ -28,67 +29,10 @@ const knex = require("knex") ({
 }
 })
 
-// Middleware to parse JSON bodies
+// Middleware to parse form and JSON data
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-// Serve static files (CSS, images, etc.)
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/Images', express.static(path.join(__dirname, 'Images')));
-// Define route for home page
-
-// Serve the root route
-//app.get('/', (req, res) => {
-  //res.render('home');  // Renders 'home.ejs' file
-//});
-
-app.get('/', (req, res) => {
-  knex('pastevents')
-      .sum('completedproducts as total') // Alias the sum as 'total'
-      .then(result => {
-          const products = result[0].total || 0; // Safely access the sum value and default to 0 if null
-          res.render('home', { products }); // Pass the sum to the template
-      })
-      .catch(error => {
-          console.error('Error querying database:', error);
-          res.status(500).send('Internal Server Error');
-      });
-});
-
-
-
-/*ADMIN LOGIN ROUTES*/
-    // Serve the login landing page (loginLanding.ejs)
-    app.get('/loginLanding', (req, res) => {
-      res.render('loginLanding', { errorMessage: null});  // Renders 'loginLanding.ejs' file
-    });
-
-    //post for login
-    app.post('/login', async (req, res) => {
-      console.log('Received POST request for login', req.body); // Log the received data
-    
-      const { username, password } = req.body;
-    
-      try {
-        const user = await knex('adminusers')
-          .select('*')
-          .where({ username, password })
-          .first();
-        console.log('User fetched from DB:', user); // Log the user object fetched from DB
-    
-        if (user) {
-          res.json({ success: true, message: 'Login successful' });
-        } else {
-          res.json({ success: false, message: 'Username or password is incorrect' });
-        }
-      } catch (error) {
-        console.error('Error during database query:', error); // Log the error during the database query
-        res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
-      }
-    });
-    
 // Configure express-session
 app.use(
   session({
@@ -103,17 +47,26 @@ app.use(
   })
 );
 
+// Static file serving
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/Images', express.static(path.join(__dirname, 'Images')));
+
+// Configure EJS
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 // Middleware for Authentication
 function isAuthenticated(req, res, next) {
   if (req.session.userId) {
     next(); // User is logged in
   } else {
     res.redirect('/loginLanding'); // Redirect to login page
-
   }
 }
 
 // Routes
+
+// Home Page
 app.get('/', (req, res) => {
   res.render('home');
 });
@@ -126,6 +79,7 @@ app.get('/loginLanding', (req, res) => {
 // Login Route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
   try {
     const user = await knex('adminusers').where({ username, password }).first();
 

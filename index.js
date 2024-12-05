@@ -351,8 +351,11 @@ app.post('/editAdmin/:id', async (req, res) => {
           envelopes,
           vests,
           completedproducts,
-          updated,
+          
         } = req.body;
+
+        const updated = req.body.updated === 'true'; // Handle checkbox as boolean
+
 
         try {
           // Update the past event in the database

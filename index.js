@@ -108,28 +108,28 @@ app.post('/addAdmin', async (req, res) => {
 app.get('/editAdmin/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await knex('adminusers').where('userid', id).first(); // Lowercase column names
-    res.render('editAdmin', { user: result });
+    const result = await knex('adminusers').where('userid', id).first(); // Match lowercase column names
+    res.render('editAdmin', { user: result }); // Pass user data to the EJS template
   } catch (error) {
     console.error('Error fetching admin user:', error);
     res.status(500).send('Error fetching admin user.');
   }
 });
 
+
 // Route to update a specific admin (POST)
 app.post('/editAdmin/:id', async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
   try {
-    await knex('adminusers')
-      .where('userid', id) // Lowercase column names
-      .update({ username: username, password: password });
-    res.redirect('/adminMaintenance');
+    await knex('adminusers').where('userid', id).update({ username: username, password: password }); // Update user
+    res.redirect('/adminMaintenance'); // Redirect to Admin Maintenance after saving
   } catch (error) {
     console.error('Error updating admin user:', error);
     res.status(500).send('Error updating admin user.');
   }
 });
+
 
 // Route to delete an admin (POST)
 app.post('/deleteAdmin/:id', async (req, res) => {

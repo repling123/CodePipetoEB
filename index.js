@@ -62,6 +62,7 @@ function isAuthenticated(req, res, next) {
     next(); // User is logged in
   } else {
     res.redirect('/loginLanding'); // Redirect to login page
+
   }
 }
 
@@ -78,7 +79,6 @@ app.get('/loginLanding', (req, res) => {
 // Login Route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const user = await knex('adminusers').where({ username, password }).first();
 

@@ -30,9 +30,13 @@
         <h1 class="main-title">Past Events Maintenance</h1>
         <div class="table-container">
             <h2 class="section-title">Events to be Updated</h2>
+            <form action="/addPastEvent" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
+                <button class="edit-button" type="submit">Add Past Event</button>
+              </form>
             <table class="events-table">
                 <thead>
                     <tr>
+                        <th>Edit</th>
                         <th>Event ID</th>
                         <th>Date</th>
                         <th>Time</th>
@@ -48,16 +52,21 @@
                         <th>Envelopes</th>
                         <th>Vests</th>
                         <th>Completed Products</th>
-                        <th>Request ID</th>
-                        <th>Edit</th>
+                        <!-- <th>Request ID</th> -->
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% pastEvents.forEach(event => { %>
                         <% if (!event.updated) { %>
                             <tr>
-                                <td><%= event.eventid %></td>
-                                <td><%= event.pasteventdate %></td>
+                                <td>
+                                    <form action="/editPastEvent/<%= event.eventid %>" method="GET" style="display:inline;">
+                                    <button class="edit-button" type="submit">Edit</button>
+                                  </form>
+                                </td>
+                                <td><%= event.eventid %></td>                                
+                                <td><%= new Intl.DateTimeFormat('en-US').format(new Date(event.pasteventdate)) %></td>
                                 <td><%= event.pasteventtime %></td>
                                 <td><%= event.eventdurationhours %></td>
                                 <td><%= event.pasteventaddress %></td>
@@ -71,13 +80,10 @@
                                 <td><%= event.envelopes %></td>
                                 <td><%= event.vests %></td>
                                 <td><%= event.completedproducts %></td>
-                                <td><%= event.requestid %></td>
-                                <td>
-                                    <form action="/editPastEvent/<%= event.eventid %>" method="GET" style="display:inline;">
-                                        <button class="edit-button" type="submit">Edit</button>
-                                      </form>
+                                <!-- <td><%= event.requestid %></td> -->
+                                <td>                                    
                                     <form action="/deletePastEvent/<%= event.eventid %>" method="POST" style="display:inline;">
-                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                                        <button class="delete-button" type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
                                       </form>
                                     </td>
                             </tr>
@@ -92,6 +98,7 @@
             <table class="events-table">
                 <thead>
                     <tr>
+                        <th>Edit</th>
                         <th>Event ID</th>
                         <th>Date</th>
                         <th>Time</th>
@@ -107,16 +114,21 @@
                         <th>Envelopes</th>
                         <th>Vests</th>
                         <th>Completed Products</th>
-                        <th>Request ID</th>
-                        <th>Edit</th>
+                        <!-- <th>Request ID</th> -->
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% pastEvents.forEach(event => { %>
                         <% if (event.updated) { %>
                             <tr>
+                                <td>                                    
+                                        <form action="/editPastEvent/<%= event.eventid %>" method="GET" style="display:inline;">
+                                        <button class="edit-button" type="submit">Edit</button>
+                                      </form>                                    
+                                </td>
                                 <td><%= event.eventid %></td>
-                                <td><%= event.pasteventdate %></td>
+                                <td><%= new Intl.DateTimeFormat('en-US').format(new Date(event.pasteventdate)) %></td>
                                 <td><%= event.pasteventtime %></td>
                                 <td><%= event.eventdurationhours %></td>
                                 <td><%= event.pasteventaddress %></td>
@@ -130,13 +142,10 @@
                                 <td><%= event.envelopes %></td>
                                 <td><%= event.vests %></td>
                                 <td><%= event.completedproducts %></td>
-                                <td><%= event.requestid %></td>
-                                <td >
-                                <form action="/editPastEvent/<%= event.eventid %>" method="GET" style="display:inline;">
-                                    <button class="edit-button" type="submit">Edit</button>
-                                  </form>
+                                <!-- <td><%= event.requestid %></td> -->
+                                <td >                               
                                 <form action="/deletePastEvent/<%= event.eventid %>" method="POST" style="display:inline;">
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                                    <button class="delete-button" type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
                                   </form>
                                 </td>
                             </tr>

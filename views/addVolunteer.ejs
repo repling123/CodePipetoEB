@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup to be a volunteer</title>
+    <style>
+        form {
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            font-size: 12px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="checkbox"], input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Signup to be a volunteer</h1>
+    <form action="/addVolunteer" method="POST">
+        <!-- Description -->
+        <label for="volunteerfirstname">First Name</label>
+        <input
+            type="text"
+            id="volunteerfirstname"
+            name="volunteerfirstname"
+            required
+        >
+
+        <label for="volunteerlastname">Last Name</label>
+        <input
+            type="text"
+            id="volunteerlastname"
+            name="volunteerlastname"
+            required
+        >
+
+        <label for="email">Enter your Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phonenumber">Enter a phone number:</label>
+        <input type="tel" id="phonenumber" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+
+        <!-- Age -->
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" required>
+
+        <!-- Gender (Radio Buttons) -->
+        <label>Gender</label>
+        <label>
+            <input type="radio" name="gender" value="Male"> Male
+        </label>
+        <label>
+            <input type="radio" name="gender" value="Female"> Female
+        </label>
+        <label>
+            <input type="radio" name="gender" value="Other"> Other
+        </label>
+
+        <label for="address">Address</label>
+        <input
+            type="text"
+            id="address"
+            name="address"
+            required
+        >
+
+        <label for="city">City</label>
+        <input
+            type="text"
+            id="city"
+            name="city"
+            required
+        >
+
+        <!-- State Dropdown -->
+        <label for="state">State</label>
+        <select id="state" name="state" required>
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA">California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+        </select>
+
+        <label for="zipcode">Zipcode</label>
+        <input
+            type="text"
+            id="zipcode"
+            name="zipcode"
+            required
+        >
+
+        <!-- PlaceHeard Dropdown -->
+        <label for="placeheard">How did you hear about us?</label>
+        <select id="placeheard" name="placeheard" required>
+            <option value="Community Event">Community Event</option>
+            <option value="Church Event">Church Event</option>
+            <option value="Social Media">Social Media</option>
+            <option value="Flyer">Flyer</option>
+            <option value="Online Ad">Online Ad</option>
+            <option value="Friend/Family">Friend/Family</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <!-- hours per month -->
+        <label for="hourspermonth">How many hours a month would you like to volunteer for?</label>
+        <input type="number" id="hourspermonth" name="hourspermonth" required>
+
+        <label for="preferreddays">What day(s) do you prefer to volunteer on?</label>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Mon"> Monday
+            </label><br>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Tue"> Tuesday
+            </label><br>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Wed"> Wednesday
+            </label><br>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Thu"> Thursday
+            </label><br>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Fri"> Friday
+            </label><br>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Sat"> Saturday
+            </label><br>
+            <label>
+            <input type="checkbox" name="preferreddaysArr[]" value="Sun"> Sunday
+            </label>
+
+        <!-- PreferredTime Dropdown -->
+        <label for="preferredtime">What is your preferred time to volunteer?</label>
+        <select id="preferredtime" name="preferredtime" required>
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+        </select>
+
+        <!-- commitment Dropdown -->
+        <label for="commitment">What is your commitment level for volunteering?</label>
+        <select id="commitment" name="commitment" required>
+                <option value="Long-Term">Long-Term</option>
+                <option value="Short-Term">Short-Term</option>
+                <option value="One-Time">One-Time</option>
+        </select>
+
+        <!-- leadership checkbox -->
+        <label for="leadership">
+            Do you want to be in a leadership position?
+            <input type="checkbox" id="leadership" name="leadership" value="true">
+        </label>
+
+        <!-- sewing level dropdown -->
+        <label for="sewinglevel">What is your sewing level?</label>
+        <select id="sewinglevel" name="sewinglevel" required>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Experienced">Experienced</option>
+        </select>
+
+        <label for="teachsewing">
+            Would you be comfortable teaching participants how to sew?
+            <input type="checkbox" id="teachsewing" name="teachsewing" value="true">
+        </label>
+
+        <label for="cantravel">
+            Are you willing to travel for events?
+            <input type="checkbox" id="cantravel" name="cantravel" value="true">
+        </label>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit Application</button>
+    </form>
+</body>
+</html>

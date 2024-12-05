@@ -154,21 +154,19 @@ app.get('/', (req, res) => {
       });
 
       //add volunteer get (same as how can i help--sign up add volunteer route)
-      //add volunteer post
-        /* Don't need this if Trey's /signup route is working
-
-      // Route to add a new volunteer (GET)
-      app.get('/signup', (req, res) => {
-        res.render('signup'); // Render the signup page
+      //add volunteer get (admin voluteer add is routed here too)
+      app.get('/addVolunteer', (req, res) => {
+        res.render('addVolunteer');
       });
 
+      //add voluteer post form route
       // Route to add a new volunteer (POST)
-      app.post('/signup', async (req, res) => {
+      app.post('/addVolunteer', async (req, res) => {
         const {
-          volfirstname,
-          vollastname,
+          volunteerfirstname,
+          volunteerlastname,
           email,
-          phonenum,
+          phonenumber,
           age,
           gender,
           address,
@@ -178,7 +176,7 @@ app.get('/', (req, res) => {
           placeheard,
           sewinglevel,
           hourspermonth,
-          preferreddays,
+          preferreddaysArr,
           preferredtime,
           commitment,
           leadership,
@@ -186,12 +184,14 @@ app.get('/', (req, res) => {
           cantravel
         } = req.body;
 
+        const preferreddays = Array.isArray(preferreddaysArr) ? preferreddaysArr.join(',') : preferreddaysArr || '';
+
         try {
           await knex('volunteers').insert({
-            volfirstname,
-            vollastname,
+            volunteerlastname,
+            volunteerfirstname,
             email,
-            phonenum,
+            phonenumber,
             age,
             gender,
             address,
@@ -204,9 +204,9 @@ app.get('/', (req, res) => {
             preferreddays,
             preferredtime,
             commitment,
-            leadership,
-            teachsewing,
-            cantravel
+            leadership: leadership === 'true',
+            teachsewing: teachsewing === 'true',
+            cantravel: cantravel === 'true'
           });
           res.redirect('/volunteerMaintenance');
         } catch (error) {
@@ -214,7 +214,6 @@ app.get('/', (req, res) => {
           res.status(500).send('Error adding volunteer.');
         }
       });
-    */
       
       //edit volunteer get
         // Route to edit a volunteer (GET)
@@ -720,11 +719,66 @@ await knex.raw(`
 
 /*HOW CAN I HELP ROUTES*/
   /*SIGN UP ROUTES*/
-      //add volunteer get (same as admin voluteer add route)
+      //add volunteer get (admin voluteer add is routed here too)
       app.get('/signup', (req, res) => {
         res.render('signup');
-      })
+      });
+
       //add voluteer post form route
+      // Route to add a new volunteer (POST)
+      app.post('/signup', async (req, res) => {
+        const {
+          volunteerfirstname,
+          volunteerlastname,
+          email,
+          phonenumber,
+          age,
+          gender,
+          address,
+          city,
+          state,
+          zipcode,
+          placeheard,
+          sewinglevel,
+          hourspermonth,
+          preferreddaysArr,
+          preferredtime,
+          commitment,
+          leadership,
+          teachsewing,
+          cantravel
+        } = req.body;
+
+        const preferreddays = Array.isArray(preferreddaysArr) ? preferreddaysArr.join(',') : preferreddaysArr || '';
+
+        try {
+          await knex('volunteers').insert({
+            volunteerlastname,
+            volunteerfirstname,
+            email,
+            phonenumber,
+            age,
+            gender,
+            address,
+            city,
+            state,
+            zipcode,
+            placeheard,
+            sewinglevel,
+            hourspermonth,
+            preferreddays,
+            preferredtime,
+            commitment,
+            leadership: leadership === 'true',
+            teachsewing: teachsewing === 'true',
+            cantravel: cantravel === 'true'
+          });
+          res.redirect('/');
+        } catch (error) {
+          console.error('Error adding volunteer:', error);
+          res.status(500).send('Error adding volunteer.');
+        }
+      });
 
   /*REQUEST EVENT ROUTES*/
       //request Event get

@@ -6,7 +6,6 @@
   <title>Login</title>
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* Inline CSS for header layout */
     header {
       position: relative;
       height: 100vh;
@@ -39,15 +38,10 @@
     .header-text .tagline {
       font-size: 1.2rem;
       font-style: italic;
-      color: #000000;
-    }
-
-    #login-box, #links, .tableau-container {
-      display: none; /* Hidden by default */
+      color: black;
     }
 
     #login-box {
-      display: block; /* Login box is visible initially */
       max-width: 400px;
       width: 90%;
       background-color: white;
@@ -58,8 +52,8 @@
       margin: 0 auto;
     }
 
-    #login-box.hidden, #links.hidden, .tableau-container.hidden {
-      display: none;
+    #links, .tableau-container {
+      display: none; /* Hidden initially */
     }
 
     #links ul {
@@ -97,11 +91,6 @@
       height: 600px;
       border: 1px solid #ddd;
     }
-
-    .hidden {
-      display: none;
-    }
-
   </style>
 </head>
 <body>
@@ -128,7 +117,7 @@
     </div>
 
     <!-- Links section -->
-    <div id="links" class="hidden">
+    <div id="links">
       <ul>
         <li><a href="/adminMaintenance" class="learn-more-btn">Admin Maintenance</a></li>
         <li><a href="/volunteerMaintenance" class="learn-more-btn">Volunteer Maintenance</a></li>
@@ -138,7 +127,7 @@
   </header>
 
   <!-- Tableau Dashboard Section -->
-  <div class="tableau-container hidden" id="tableau-section">
+  <div class="tableau-container" id="tableau-section">
     <h2>Dashboard</h2>
     <div id="tableauViz"></div>
   </div>
@@ -169,11 +158,11 @@
 
         if (data.success) {
           // Hide login box
-          loginBox.classList.add('hidden');
+          loginBox.style.display = 'none';
 
           // Show links and tableau section
-          links.classList.remove('hidden');
-          tableauSection.classList.remove('hidden');
+          links.style.display = 'block';
+          tableauSection.style.display = 'block';
 
           // Update header text
           tagline.textContent = 'View the data below';

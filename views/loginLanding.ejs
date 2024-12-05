@@ -6,7 +6,7 @@
   <title>Login</title>
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* Inline CSS for header layout */
+    /* General styles for header */
     header {
       position: relative;
       height: 100vh;
@@ -23,6 +23,7 @@
                         url('/Images/Home-Page-Header.jpg');
     }
 
+    /* Header text */
     .header-text {
       text-align: center;
       margin-bottom: 20px;
@@ -39,15 +40,11 @@
     .header-text .tagline {
       font-size: 1.2rem;
       font-style: italic;
-      color: #000000;
+      color: white; /* Separate style for the tagline to keep it white */
     }
 
-    #login-box, #links, .tableau-container {
-      display: none; /* Hidden by default */
-    }
-
+    /* Login box styles */
     #login-box {
-      display: block; /* Login box is visible initially */
       max-width: 400px;
       width: 90%;
       background-color: white;
@@ -63,22 +60,24 @@
     }
 
     #login-box label {
-      display: block; /* Make labels block elements */
-      color: black; /* Change label text color to black */
-      margin-bottom: 5px; /* Add some space below the labels */
+      display: block; /* Ensure labels are above inputs */
+      color: black; /* Keep labels black */
+      margin-bottom: 5px;
+      font-weight: bold; /* Optional: Make labels bold for better visibility */
     }
 
     #login-box input {
-      display: block; /* Make inputs block elements */
-      width: 100%; /* Make inputs take full width */
-      color: black; /* Change input text color to black */
-      margin-bottom: 15px; /* Add some space below the inputs */
-      padding: 10px; /* Add padding to inputs */
-      border: 1px solid #ccc; /* Add border to inputs */
-      border-radius: 5px; /* Add border radius to inputs */
-      box-sizing: border-box; /* Include padding and border in element's total width and height */
+      display: block; /* Ensure inputs are block elements */
+      width: 100%; /* Full width inputs */
+      color: black; /* Keep input text black */
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
 
+    /* Links section */
     #links ul {
       list-style: none;
       padding: 0;
@@ -102,6 +101,7 @@
       background-color: #0056b3;
     }
 
+    /* Tableau container */
     .tableau-container {
       margin: 20px auto;
       width: 100%;
@@ -115,10 +115,10 @@
       border: 1px solid #ddd;
     }
 
+    /* Hidden class */
     .hidden {
       display: none;
     }
-
   </style>
 </head>
 <body>
@@ -185,25 +185,17 @@
         const data = await response.json();
 
         if (data.success) {
-          // Hide login box
-          loginBox.classList.add('hidden');
-
-          // Show links and tableau section
-          links.classList.remove('hidden');
-          tableauSection.classList.remove('hidden');
-
-          // Update header text
-          tagline.textContent = 'View the data below';
-          mainTitle.textContent = 'Welcome back';
-
-          // Initialize Tableau
-          initTableau();
+          loginBox.classList.add('hidden'); // Hide login box
+          links.classList.remove('hidden'); // Show links
+          tableauSection.classList.remove('hidden'); // Show Tableau dashboard
+          tagline.textContent = 'View the data below'; // Update tagline text
+          mainTitle.textContent = 'Welcome back'; // Update header title
+          initTableau(); // Initialize Tableau
         } else {
           errorMessage.textContent = data.message || 'Invalid login credentials.';
           errorMessage.style.display = 'block';
         }
       } catch (error) {
-        // Handle unexpected errors
         errorMessage.textContent = 'An unexpected error occurred.';
         errorMessage.style.display = 'block';
       }

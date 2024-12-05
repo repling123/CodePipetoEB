@@ -55,7 +55,7 @@
               <tr>
                 <td><%= user.userid %></td>
                 <td><%= user.username %></td>
-                <td><%= userpPassword %></td>
+                <td><%= user.password %></td>
                 <td class="action-buttons">
                   <a href="/editAdmin/<%= user.userid %>" class="btn btn-edit">Edit</a>
                   <form action="/deleteAdmin/<%= user.userid %>" method="POST" style="display:inline;">

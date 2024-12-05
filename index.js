@@ -782,9 +782,69 @@ await knex.raw(`
 
   /*REQUEST EVENT ROUTES*/
       //request Event get
-
+      // Route to render the requestEvent page (GET)
+      app.get('/requestEvent', (req, res) => {
+        res.render('requestEvent');
+      });
 
       //request Event post
+      // Route to handle the event request form submission (POST)
+      app.post('/requestEvent', async (req, res) => {
+        const {
+          contactfirstname,
+          contactlastname,
+          contactemail,
+          contactnumber,
+          eventdate,
+          flexibledate,
+          eventstarttime,
+          eventlength,
+          eventaddress,
+          eventcity,
+          eventstate,
+          eventzipcode,
+          estimatedattendance,
+          preferredactivity,
+          sufficientsewmachines,
+          numsewers,
+          sufficienttables,
+          tabletype,
+          jenstory,
+          otherinfo
+        } = req.body;
+
+        const approved = false; // Default value for approved
+
+        try {
+          await knex('requestedevents').insert({
+            contactfirstname,
+            contactlastname,
+            contactemail,
+            contactnumber,
+            eventdate,
+            flexibledate: flexibledate === 'on',
+            eventstarttime,
+            eventlength,
+            eventaddress,
+            eventcity,
+            eventstate,
+            eventzipcode,
+            estimatedattendance,
+            preferredactivity,
+            sufficientsewmachines: sufficientsewmachines === 'on',
+            numsewers,
+            sufficienttables: sufficienttables === 'on',
+            tabletype,
+            jenstory: jenstory === 'on',
+            otherinfo,
+            approved
+          });
+          res.redirect('/');
+        } catch (error) {
+          console.error('Error requesting event:', error);
+          res.status(500).send('Error requesting event.');
+        }
+      });
 
 
 // port number, (parameters) => what you want it to do.

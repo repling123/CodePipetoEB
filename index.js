@@ -17,9 +17,11 @@ const knex = require("knex") ({
   "postgres",
   password : process.env.RDS_PASSWORD || 
   // "sqldatabase9128",
-  "sweatersanitizerhairclip",
-  database : process.env.RDS_DB_NAME || 
-  "deletelater",
+  //"sweatersanitizerhairclip",
+  "Th11384363",
+  database : process.env.RDS_DB_NAME ||
+  "intexscript",
+  //"deletelater",
   // "ebdb",
   port : process.env.RDS_PORT || 5432,
   ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false  // Fixed line
@@ -38,9 +40,23 @@ app.use('/Images', express.static(path.join(__dirname, 'Images')));
 // Define route for home page
 
 // Serve the root route
+//app.get('/', (req, res) => {
+  //res.render('home');  // Renders 'home.ejs' file
+//});
+
 app.get('/', (req, res) => {
-  res.render('home');  // Renders 'home.ejs' file
+  knex('pastevents')
+      .sum('completedproducts as total') // Alias the sum as 'total'
+      .then(result => {
+          const products = result[0].total || 0; // Safely access the sum value and default to 0 if null
+          res.render('home', { products }); // Pass the sum to the template
+      })
+      .catch(error => {
+          console.error('Error querying database:', error);
+          res.status(500).send('Internal Server Error');
+      });
 });
+
 
 /*ADMIN LOGIN ROUTES*/
     // Serve the login landing page (loginLanding.ejs)

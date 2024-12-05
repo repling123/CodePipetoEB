@@ -51,12 +51,12 @@
           <% adminusers.forEach(function(user) { %>
 
           <tr>
-            <td><%= user.UserID %></td>
-            <td><%= user.Username %></td>
+            <td><%= user.userID %></td>
+            <td><%= user.username %></td>
             <td class="action-buttons">
-              <a href="/editAdmin/<%= user.UserID %>" class="btn btn-edit">Edit</a>
-              <form action="/deleteAdmin/<%= user.UserID %>" method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+              <a href="/editAdmin/<%= user.userID %>" class="edit-button">Edit</a>
+              <form action="/deleteAdmin/<%= user.userID %>" method="POST" style="display:inline;">
+                <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
               </form>
             </td>
           </tr>

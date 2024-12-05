@@ -142,18 +142,162 @@ app.get('/', (req, res) => {
 
 
     /*ADMIN VOLUNTEER MAINTENANCE ROUTES*/
-      //add volunteer get (same as how can i help--sign up add volunteer route)
+      // Route to fetch all volunteers and render the volunteer maintenance page
+      app.get('/volunteerMaintenance', async (req, res) => {
+        try {
+          const volunteers = await knex.select('*').from('volunteers').orderBy(['volunteerlastname', 'volunteerlastname'], 'asc');
+          res.render('volunteerMaintenance', { volunteers });
+        } catch (error) {
+          console.error('Error fetching volunteers:', error);
+          res.status(500).send('Error fetching volunteers.');
+        }
+      });
 
+      //add volunteer get (same as how can i help--sign up add volunteer route)
       //add volunteer post
-        
+        /* Don't need this if Trey's /signup route is working
+
+      // Route to add a new volunteer (GET)
+      app.get('/signup', (req, res) => {
+        res.render('signup'); // Render the signup page
+      });
+
+      // Route to add a new volunteer (POST)
+      app.post('/signup', async (req, res) => {
+        const {
+          volfirstname,
+          vollastname,
+          email,
+          phonenum,
+          age,
+          gender,
+          address,
+          city,
+          state,
+          zipcode,
+          placeheard,
+          sewinglevel,
+          hourspermonth,
+          preferreddays,
+          preferredtime,
+          commitment,
+          leadership,
+          teachsewing,
+          cantravel
+        } = req.body;
+
+        try {
+          await knex('volunteers').insert({
+            volfirstname,
+            vollastname,
+            email,
+            phonenum,
+            age,
+            gender,
+            address,
+            city,
+            state,
+            zipcode,
+            placeheard,
+            sewinglevel,
+            hourspermonth,
+            preferreddays,
+            preferredtime,
+            commitment,
+            leadership,
+            teachsewing,
+            cantravel
+          });
+          res.redirect('/volunteerMaintenance');
+        } catch (error) {
+          console.error('Error adding volunteer:', error);
+          res.status(500).send('Error adding volunteer.');
+        }
+      });
+    */
       
       //edit volunteer get
-
+        // Route to edit a volunteer (GET)
+        app.get('/editVolunteer/:id', async (req, res) => {
+          const { id } = req.params;
+          try {
+            const volunteer = await knex('volunteers').where('volunteerid', id).first();
+            res.render('editVolunteer', { volunteer });
+          } catch (error) {
+            console.error('Error fetching volunteer:', error);
+            res.status(500).send('Error fetching volunteer.');
+          }
+        });
 
       //edit volunteer post
+        // Route to edit a volunteer (POST)
+        app.post('/editVolunteer/:id', async (req, res) => {
+          const { id } = req.params;
+          const {
+            volunteerfirstname,
+            volunteerlastname,
+            email,
+            phonenumber,
+            age,
+            gender,
+            address,
+            city,
+            state,
+            zipcode,
+            placeheard,
+            sewinglevel,
+            hourspermonth,
+            volunteerDays,
+            preferredtime,
+            commitment,
+            leadership,
+            teachsewing,
+            cantravel
+          } = req.body;
 
+          const preferreddays = Array.isArray(volunteerDays) ? volunteerDays.join(',') : '';
+
+          try {
+            await knex('volunteers').where('volunteerid', id).update({
+              volunteerfirstname,
+              volunteerlastname,
+              email,
+              phonenumber,
+              age,
+              gender,
+              address,
+              city,
+              state,
+              zipcode,
+              placeheard,
+              sewinglevel,
+              hourspermonth,
+              preferreddays,
+              preferredtime,
+              commitment,
+              leadership: leadership === 'true',
+              teachsewing: teachsewing === 'true',
+              cantravel: cantravel === 'true'
+            });
+            res.redirect('/volunteerMaintenance');
+          } catch (error) {
+            console.error('Error updating volunteer:', error);
+            res.status(500).send('Error updating volunteer.');
+          }
+        });
 
       //delete volunteer
+      // Route to delete a volunteer (POST)
+      app.post('/deleteVolunteer/:id', async (req, res) => {
+        const { id } = req.params;
+        try {
+          await knex('volunteers').where('volunteerid', id).del();
+          res.redirect('/volunteerMaintenance');
+        } catch (error) {
+          console.error('Error deleting volunteer:', error);
+          res.status(500).send('Error deleting volunteer.');
+        }
+      });
 
 
     /*ADMIN EVENT MAINTENANCE ROUTES*/
@@ -288,6 +432,7 @@ app.get('/', (req, res) => {
           const pendingEvents = await knex('requestedevents')
         .select('*')
         .where({ approved: false })
+        .andWhere('eventdate', '>=', knex.fn.now())
         .orderBy('eventdate', 'asc');
 
           // Fetch approved future events
@@ -427,6 +572,58 @@ app.get('/', (req, res) => {
         }
       });
 
+//route to take requested events that are in the past and add them to the pastevents table
+app.post('/migratePastEvents', async (req, res) => {
+  try {
+
+// Insert data into pastevents table from requestedevents table where eventdate is in the past
+await knex.raw(`
+  INSERT INTO pastevents (
+    pasteventparticipants, pasteventdate, pasteventtime, eventdurationhours, pasteventaddress, 
+    pasteventcity, pasteventstate, pasteventzipcode, itemsproduced, pockets, collars, 
+    envelopes, vests, completedproducts, requestid, updated
+  )
+  SELECT 
+    estimatedattendance, eventdate, eventstarttime, eventlength, eventaddress, 
+    eventcity, eventstate, eventzipcode, NULL, NULL, NULL, 
+    NULL, NULL, NULL, requestid, false
+  FROM requestedevents
+  WHERE eventdate < NOW()
+  ON CONFLICT (eventid) DO NOTHING
+`);
+
+      // Insert data into pastevents table from requestedevents table where eventdate is in the past
+      // await knex('pastevents').insert(
+      //     knex('requestedevents')
+      //         .select(
+      //           'estimatedattendance as pasteventparticipants',
+      //             'eventdate as pasteventdate',
+      //             'eventstarttime as pasteventtime',
+      //             'eventlength as eventduration',
+      //             'eventaddress as pasteventaddress',
+      //             'eventcity as pasteventcity',
+      //             'eventstate as pasteventstate',
+      //             'eventzipcode as pasteventzipcode',
+      //             knex.raw('NULL as itemsproduced'),        // Explicitly setting NULL
+      //             knex.raw('NULL as pockets'),             // For nullable columns
+      //             knex.raw('NULL as collars'),             // Can also use default values like 0
+      //             knex.raw('NULL as envelopes'),
+      //             knex.raw('NULL as vests'),
+      //             knex.raw('NULL as completedproducts'),
+                 
+      //         )
+      //         .where('eventdate', '<', knex.fn.now())
+      // );
+
+      res.redirect('/eventPastMaintenance'); // Redirect back to past events maintenance page
+      // res.status(200).send('Past events migrated successfully.');
+  } catch (error) {
+      console.error('Error migrating past events:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+    
 
       //editPastEvent routes
       // GET route to fetch a specific past event for editing

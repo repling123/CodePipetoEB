@@ -40,15 +40,23 @@
             color: white;
             font-size: 12px;
             cursor: pointer;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
+        
         button:hover {
             background-color: #448947;
         }
     </style>
 </head>
 <body>
+    <a href="/"class="top-right-button">Home</a>
     <main>
         <h1>Request an Event</h1>
+        <h2>We encourage scheduling 6 months in advance!</h2>
         <form action="/requestEvent" method="POST">
             <div class="form-group">
                 <label for="contactfirstname">First Name:</label>

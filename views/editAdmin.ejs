@@ -5,70 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Admin</title>
   <link rel="stylesheet" href="/styles.css">
-    <style>
-        
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .action-buttons a {
-            margin-right: 10px;
-        }
-    </style>
+  <style>
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-cancel {
+      background-color: #dc3545;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+  </style>
 </head>
 <body>
     <a href="/adminMaintenance" class="top-right-button">Back to Admin Maintenance</a>
   <main>
     <div class="container">
       <h2>Edit Admin</h2>
-      <form id="edit-admin-form" action="/editAdmin/<%= user.UserID %>" method="POST">
+      <form id="edit-admin-form" action="/editAdmin/<%= user.userid %>" method="POST">
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" value="<%= user.Username %>" required>
+        <input type="text" id="username" name="username" value="<%= user.username %>" required>
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" value="<%= user.Password %>" required>
+        <input type="password" id="password" name="password" value="<%= user.password %>" required>
 
-        <button type="submit" class="btn">Save</button>
-        <a href="/adminMaintenance" class="btn btn-cancel">Cancel</a>
+        <button type="submit" class="edit-button">Save</button>
+        <a href="/adminMaintenance" class="delete-button">Cancel</a>
       </form>
     </div>
   </main>
-
-  <script>
-    document.getElementById('edit-admin-form').addEventListener('submit', async (e) => {
-      e.preventDefault(); // Prevent default form submission
-
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const userId = '<%= user.UserID %>';
-
-      try {
-        const response = await fetch(`/editAdmin/${userId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password }),
-        });
-
-        if (response.ok) {
-          window.location.href = '/adminMaintenance'; // Redirect to adminMaintenance on success
-        } else {
-          alert('Failed to update admin.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while updating the admin.');
-      }
-    });
-  </script>
 </body>
 </html>

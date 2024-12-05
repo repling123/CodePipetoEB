@@ -94,6 +94,14 @@
     border-radius: 5px;
 }
 
+.top-right-button:hover {
+  background-color: #125c64;
+}
+
+.top-left-button:hover {
+  background-color: #125c64;
+}
+
 .top-left-button {
   position: absolute;
   top: 10px;

@@ -31,13 +31,13 @@
             margin-right: 5px;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #1b95a3;
             color: white;
             font-size: 12px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #146d77;
         }
     </style>
 </head>
@@ -47,7 +47,7 @@
     <h1 style="text-align: center;">Signup to be a volunteer</h1>
     <form action="/signup" method="POST">
         <!-- Description -->
-        <label for="volunteerfirstname">First Name</label>
+        <label for="volunteerfirstname">First Name:</label>
         <input
             type="text"
             id="volunteerfirstname"
@@ -55,7 +55,7 @@
             required
         >
 
-        <label for="volunteerlastname">Last Name</label>
+        <label for="volunteerlastname">Last Name:</label>
         <input
             type="text"
             id="volunteerlastname"
@@ -70,11 +70,11 @@
         <input type="tel" id="phonenumber" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
 
         <!-- Age -->
-        <label for="age">Age</label>
+        <label for="age">Age:</label>
         <input type="number" id="age" name="age" required>
 
         <!-- Gender (Radio Buttons) -->
-        <label>Gender</label>
+        <label>Gender:</label>
         <label>
             <input type="radio" name="gender" value="Male"> Male
         </label>
@@ -85,7 +85,7 @@
             <input type="radio" name="gender" value="Other"> Other
         </label>
 
-        <label for="address">Address</label>
+        <label for="address">Address:</label>
         <input
             type="text"
             id="address"
@@ -93,7 +93,7 @@
             required
         >
 
-        <label for="city">City</label>
+        <label for="city">City:</label>
         <input
             type="text"
             id="city"
@@ -102,7 +102,7 @@
         >
 
         <!-- State Dropdown -->
-        <label for="state">State</label>
+        <label for="state">State:</label>
         <select id="state" name="state" required>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -156,7 +156,7 @@
             <option value="WY">Wyoming</option>
         </select>
 
-        <label for="zipcode">Zipcode</label>
+        <label for="zipcode">Zipcode:</label>
         <input
             type="text"
             id="zipcode"
@@ -183,22 +183,22 @@
         <label for="preferreddays">What day(s) do you prefer to volunteer on?</label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Mon"> Monday
-            </label><br>
+            </label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Tue"> Tuesday
-            </label><br>
+            </label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Wed"> Wednesday
-            </label><br>
+            </label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Thu"> Thursday
-            </label><br>
+            </label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Fri"> Friday
-            </label><br>
+            </label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Sat"> Saturday
-            </label><br>
+            </label>
             <label>
             <input type="checkbox" name="preferreddaysArr[]" value="Sun"> Sunday
             </label>

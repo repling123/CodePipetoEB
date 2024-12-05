@@ -26,6 +26,7 @@
       .dashboard-container {
           margin-top: 20px;
       }
+
   </style>
 </head>
 <body>
@@ -48,6 +49,7 @@
         </thead>
         <tbody>
           <% adminusers.forEach(function(user) { %>
+
           <tr>
             <td><%= user.UserID %></td>
             <td><%= user.Username %></td>
@@ -58,11 +60,11 @@
               </form>
             </td>
           </tr>
+
           <% }); %>
         </tbody>
       </table>
     </div>
-
     <!-- Add Admin Button -->
     <a href="/addAdmin" class="btn btn-add">Add Admin</a>
     </div>

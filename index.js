@@ -1,6 +1,7 @@
 let express = require('express');
 let app = express();
-const session = require('express-session'); // Import express-sessionlet path = require('path');
+const session = require('express-session'); // Import express-session
+const path = require('path'); // Correctly place the path import
 const PORT = process.env.PORT || 3000
 // grab html form from file 
 // allows to pull JSON data from form 
@@ -32,7 +33,7 @@ const knex = require("knex") ({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Configure express-session
+// Configure express-session (only once)
 app.use(
   session({
     secret: 'your-secret-key', // Replace with a strong secret
@@ -47,23 +48,6 @@ app.use(
 );
 
 // Middleware to serve static files
-app.use(express.static('public'));
-
-// Configure express-session
-app.use(
-  session({
-    secret: 'your-secret-key', // Replace with a strong secret
-    resave: false, // Don't resave session if unmodified
-    saveUninitialized: false, // Don't save empty sessions
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 2, // Session expiration: 2 hours
-      httpOnly: true, // Prevent client-side JavaScript access
-      secure: false, // Set true if using HTTPS
-    },
-  })
-);
-
-// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Images', express.static(path.join(__dirname, 'Images')));
 
@@ -71,10 +55,10 @@ app.use('/Images', express.static(path.join(__dirname, 'Images')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Middleware for Authentication using Cookies
+// Middleware for Authentication
 function isAuthenticated(req, res, next) {
-  if (req.cookies.security === 'true') {
-    next(); // Allow access if the security cookie is set to true
+  if (req.session.userId) {
+    next(); // User is logged in
   } else {
     res.redirect('/loginLanding'); // Redirect to login page
   }
@@ -85,15 +69,15 @@ function isAuthenticated(req, res, next) {
 // Home Page
 app.get('/', (req, res) => {
   knex('pastevents')
-      .sum('completedproducts as total') // Alias the sum as 'total'
-      .then(result => {
-          const products = result[0].total || 0; // Safely access the sum value and default to 0 if null
-          res.render('home', { products }); // Pass the sum to the template
-      })
-      .catch(error => {
-          console.error('Error querying database:', error);
-          res.status(500).send('Internal Server Error');
-      });
+    .sum('completedproducts as total') // Alias the sum as 'total'
+    .then((result) => {
+      const products = result[0].total || 0; // Safely access the sum value and default to 0 if null
+      res.render('home', { products }); // Pass the sum to the template
+    })
+    .catch((error) => {
+      console.error('Error querying database:', error);
+      res.status(500).send('Internal Server Error');
+    });
 });
 
 // Login Landing Page
@@ -123,8 +107,14 @@ app.post('/login', async (req, res) => {
 
 // Logout Route
 app.get('/logout', (req, res) => {
-  res.clearCookie('security'); // Clear the security cookie
-  res.redirect('/loginLanding'); // Redirect to login
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      res.status(500).send('Error logging out.');
+    } else {
+      res.redirect('/loginLanding');
+    }
+  });
 });
 
 // Admin Maintenance Page (Protected)

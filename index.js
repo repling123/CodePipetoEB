@@ -95,19 +95,20 @@ app.get('/addAdmin', (req, res) => {
 app.post('/addAdmin', async (req, res) => {
   const { username, password } = req.body;
   try {
-    await knex('adminusers').insert({ Username: username, Password: password });
-    res.redirect('/adminMaintenance');
+    await knex('adminusers').insert({ username, password }); // Inserts data into the database
+    res.redirect('/adminMaintenance'); // Redirects back to the admin maintenance page
   } catch (error) {
     console.error('Error adding admin user:', error);
     res.status(500).send('Error adding admin user.');
   }
 });
 
-// Route to edit an admin (GET)
+
+// Route to fetch a specific admin for editing (GET)
 app.get('/editAdmin/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await knex('adminusers').where('UserID', id).first();
+    const result = await knex('adminusers').where('userid', id).first(); // Lowercase column names
     res.render('editAdmin', { user: result });
   } catch (error) {
     console.error('Error fetching admin user:', error);
@@ -115,12 +116,14 @@ app.get('/editAdmin/:id', async (req, res) => {
   }
 });
 
-// Route to edit an admin (POST)
+// Route to update a specific admin (POST)
 app.post('/editAdmin/:id', async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
   try {
-    await knex('adminusers').where('UserID', id).update({ Username: username, Password: password });
+    await knex('adminusers')
+      .where('userid', id) // Lowercase column names
+      .update({ username: username, password: password });
     res.redirect('/adminMaintenance');
   } catch (error) {
     console.error('Error updating admin user:', error);
@@ -132,7 +135,7 @@ app.post('/editAdmin/:id', async (req, res) => {
 app.post('/deleteAdmin/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await knex('adminusers').where('UserID', id).del();
+    await knex('adminusers').where('userid', id).del(); // Lowercase column names
     res.redirect('/adminMaintenance');
   } catch (error) {
     console.error('Error deleting admin user:', error);

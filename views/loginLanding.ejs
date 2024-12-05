@@ -42,7 +42,12 @@
       color: #ddd;
     }
 
+    #login-box, #links, .tableau-container {
+      display: none; /* Hidden by default */
+    }
+
     #login-box {
+      display: block; /* Login box is visible initially */
       max-width: 400px;
       width: 90%;
       background-color: white;
@@ -92,6 +97,11 @@
       height: 600px;
       border: 1px solid #ddd;
     }
+
+    .hidden {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -159,6 +169,7 @@
 
         if (data.success) {
           // Hide login box
+          // On successful login
           loginBox.classList.add('hidden');
 
           // Show links and tableau section
@@ -176,8 +187,9 @@
           errorMessage.style.display = 'block';
         }
       } catch (error) {
+        // Handle unexpected errors
         errorMessage.textContent = 'An unexpected error occurred.';
-        errorMessage.style.display = 'block';
+        errorMessage.classList.remove('hidden');
       }
     });
 

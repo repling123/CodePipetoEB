@@ -75,15 +75,16 @@ app.get('/', (req, res) => {
 
     /*ADMIN MAINTENANCE ROUTES*/
     // Route to fetch all admin users and render the admin maintenance page
-  app.get('/adminMaintenance', async (req, res) => {
-    try {
-      const result = await knex.select('*').from('adminusers');
-      res.render('adminMaintenance', { adminusers: result });
-    } catch (error) {
-      console.error('Error fetching admin users:', error);
-      res.status(500).send('Error fetching admin users.');
-    }
-  });
+    app.get('/adminMaintenance', async (req, res) => {
+      try {
+        const result = await knex.select('*').from('adminusers');
+        console.log('Admin users fetched from DB:', result); // Log the fetched data
+        res.render('adminMaintenance', { adminusers: result });
+      } catch (error) {
+        console.error('Error fetching admin users:', error);
+        res.status(500).send('Error fetching admin users.');
+      }
+    });
 
   // Route to add a new admin (GET)
   app.get('/addAdmin', (req, res) => {

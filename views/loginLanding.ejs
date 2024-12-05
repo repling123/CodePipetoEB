@@ -6,16 +6,10 @@
   <title>Login</title>
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* Remove fixed height to allow page to extend dynamically */
-    body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%; /* Ensures the page extends fully */
-    }
-
+    /* Inline CSS for header layout */
     header {
       position: relative;
+      height: 100vh;
       background: url('/Images/Home-Page-Header.jpg') no-repeat center center;
       background-size: cover;
       background-attachment: fixed;
@@ -45,10 +39,15 @@
     .header-text .tagline {
       font-size: 1.2rem;
       font-style: italic;
-      color: white;
+      color: #000000;
+    }
+
+    #login-box, #links, .tableau-container {
+      display: none; /* Hidden by default */
     }
 
     #login-box {
+      display: block; /* Login box is visible initially */
       max-width: 400px;
       width: 90%;
       background-color: white;
@@ -59,8 +58,25 @@
       margin: 0 auto;
     }
 
-    #links, .tableau-container {
-      display: none; /* Hidden initially */
+    #login-box.hidden, #links.hidden, .tableau-container.hidden {
+      display: none;
+    }
+
+    #login-box label {
+      display: block; /* Make labels block elements */
+      color: black; /* Change label text color to black */
+      margin-bottom: 5px; /* Add some space below the labels */
+    }
+
+    #login-box input {
+      display: block; /* Make inputs block elements */
+      width: 100%; /* Make inputs take full width */
+      color: black; /* Change input text color to black */
+      margin-bottom: 15px; /* Add some space below the inputs */
+      padding: 10px; /* Add padding to inputs */
+      border: 1px solid #ccc; /* Add border to inputs */
+      border-radius: 5px; /* Add border radius to inputs */
+      box-sizing: border-box; /* Include padding and border in element's total width and height */
     }
 
     #links ul {
@@ -74,7 +90,7 @@
       width: 200px;
       text-align: center;
       padding: 10px;
-      /* background-color: #007bff; */
+      background-color: #007bff;
       color: white;
       text-decoration: none;
       border-radius: 5px;
@@ -82,23 +98,27 @@
       transition: background-color 0.3s;
     }
 
-    /* #links ul li a:hover {
+    #links ul li a:hover {
       background-color: #0056b3;
-    } */
+    }
 
     .tableau-container {
       margin: 20px auto;
       width: 100%;
       max-width: 1200px;
       text-align: center;
-      padding-bottom: 20px; /* Add padding to prevent cutoff */
     }
 
     .tableau-container #tableauViz {
       width: 100%;
-      height: 800px; /* Set a sufficient height to avoid cutting off */
+      height: 600px;
       border: 1px solid #ddd;
     }
+
+    .hidden {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -125,7 +145,7 @@
     </div>
 
     <!-- Links section -->
-    <div id="links">
+    <div id="links" class="hidden">
       <ul>
         <li><a href="/adminMaintenance" class="learn-more-btn">Admin Maintenance</a></li>
         <li><a href="/volunteerMaintenance" class="learn-more-btn">Volunteer Maintenance</a></li>
@@ -135,7 +155,7 @@
   </header>
 
   <!-- Tableau Dashboard Section -->
-  <div class="tableau-container" id="tableau-section">
+  <div class="tableau-container hidden" id="tableau-section">
     <h2>Dashboard</h2>
     <div id="tableauViz"></div>
   </div>
@@ -165,17 +185,25 @@
         const data = await response.json();
 
         if (data.success) {
-          loginBox.style.display = 'none';
-          links.style.display = 'block';
-          tableauSection.style.display = 'block';
+          // Hide login box
+          loginBox.classList.add('hidden');
+
+          // Show links and tableau section
+          links.classList.remove('hidden');
+          tableauSection.classList.remove('hidden');
+
+          // Update header text
           tagline.textContent = 'View the data below';
           mainTitle.textContent = 'Welcome back';
+
+          // Initialize Tableau
           initTableau();
         } else {
           errorMessage.textContent = data.message || 'Invalid login credentials.';
           errorMessage.style.display = 'block';
         }
       } catch (error) {
+        // Handle unexpected errors
         errorMessage.textContent = 'An unexpected error occurred.';
         errorMessage.style.display = 'block';
       }
@@ -186,7 +214,7 @@
       const url = 'https://public.tableau.com/views/Intex_17333558878840/Dashboard1';
       const options = {
         width: placeholderDiv.offsetWidth,
-        height: 800, /* Match the container height */
+        height: 600,
         hideTabs: true,
         hideToolbar: true,
       };

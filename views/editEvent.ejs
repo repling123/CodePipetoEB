@@ -45,7 +45,7 @@
         </div>
 
         <div>
-            <label for="contactnumber">Contact Number:</label>
+            <label for="contactnumber">Contact Phone Number:</label>
             <input
                 type="text"
                 id="contactnumber"
@@ -155,12 +155,11 @@
 
         <div>
             <label for="preferredactivity">Preferred Activity:</label>
-            <input
-                type="text"
-                id="preferredactivity"
-                name="preferredactivity"
-                value="<%= event.preferredactivity %>"
-            />
+            <select id="preferredactivity" name="preferredactivity">
+              <% preferredActivities.forEach(activity => { %>
+                <option value="<%= activity.preferredactivity %>"><%= activity.preferredactivity %></option>
+              <% }) %>
+            </select>
         </div>
 
         <div>
@@ -194,19 +193,18 @@
                 <%= event.sufficienttables ? 'checked' : '' %>
             />
         </div>
-
+    
         <div>
             <label for="tabletype">Table Type:</label>
-            <input
-                type="text"
-                id="tabletype"
-                name="tabletype"
-                value="<%= event.tabletype %>"
-            />
+            <select id="tabletype" name="tabletype">
+              <% tableTypes.forEach(activity => { %>
+                <option value="<%= activity.tabletype %>"><%= activity.tabletype %></option>
+              <% }) %>
+            </select>
         </div>
 
         <div>
-            <label for="jenstory">Jenn Story:</label>
+            <label for="jenstory">Jen Story:</label>
             <input
                 type="checkbox"
                 id="jenstory"

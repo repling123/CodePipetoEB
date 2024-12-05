@@ -75,15 +75,16 @@ app.get('/', (req, res) => {
 
     /*ADMIN MAINTENANCE ROUTES*/
     // Route to fetch all admin users and render the admin maintenance page
-  app.get('/adminMaintenance', async (req, res) => {
-    try {
-      const result = await knex.select('*').from('adminusers');
-      res.render('adminMaintenance', { adminusers: result });
-    } catch (error) {
-      console.error('Error fetching admin users:', error);
-      res.status(500).send('Error fetching admin users.');
-    }
-  });
+    app.get('/adminMaintenance', async (req, res) => {
+      try {
+        const result = await knex.select('*').from('adminusers');
+        console.log('Admin users fetched from DB:', result); // Log the fetched data
+        res.render('adminMaintenance', { adminusers: result });
+      } catch (error) {
+        console.error('Error fetching admin users:', error);
+        res.status(500).send('Error fetching admin users.');
+      }
+    });
 
   // Route to add a new admin (GET)
   app.get('/addAdmin', (req, res) => {
@@ -156,12 +157,130 @@ app.get('/', (req, res) => {
 
 
     /*ADMIN EVENT MAINTENANCE ROUTES*/
-      //add event get
-        //same route as the how can i help request event except this one does not need to be approved
+      // Route to add a new event (GET)      
+      app.get('/addEvent', async (req, res) => {
+        try {
+          const preferredActivities = await knex('requestedevents').distinct('preferredactivity');
+            const tableTypes = await knex('requestedevents').distinct(knex.raw('LOWER(tabletype) as tabletype'));
+          res.render('addEvent', { preferredActivities, tableTypes });
+        } catch (error) {
+          console.error('Error fetching preferred activities:', error);
+          res.status(500).send('Error fetching preferred activities.');
+        }
+      });
+
+      // Route to add a new event (POST)
+      app.post('/addEvent', async (req, res) => {
+        const {
+          contactfirstname,
+          contactlastname,
+          contactemail,
+          contactnumber,
+          eventdate,
+          eventstarttime,
+          eventlength,
+          eventaddress,
+          eventcity,
+          eventstate,
+          eventzipcode,
+          estimatedattendance,
+          preferredactivity,
+          numsewers,
+          tabletype,
+          otherinfo,
+        } = req.body;
+
+        const approved = req.body.approved === 'true'; // Handle checkbox as boolean
+        const flexibledate = req.body.flexibledate === 'true'; // Handle checkbox as boolean
+        const sufficientsewmachines = req.body.sufficientsewmachines === 'true'; // Handle checkbox as boolean
+        const sufficienttables = req.body.sufficienttables === 'true'; // Handle checkbox as boolean
+        const jenstory = req.body.jenstory === 'true'; // Handle checkbox as boolean
+
+        try {
+          // Insert the new event into the database
+          await knex('requestedevents').insert({
+            contactfirstname,
+            contactlastname,
+            contactemail,
+            contactnumber,
+            eventdate,
+            eventstarttime,
+            eventlength,
+            eventaddress,
+            eventcity,
+            eventstate,
+            eventzipcode,
+            estimatedattendance,
+            preferredactivity,
+            flexibledate,
+            sufficientsewmachines,
+            numsewers,
+            sufficienttables,
+            tabletype,
+            jenstory,
+            otherinfo,
+            approved,
+          });
+
+          res.redirect('/eventMaintenance'); // Redirect back to event maintenance page
+        } catch (err) {
+          console.error('Error adding event:', err);
+          res.status(500).send('Error adding event.');
+        }
+      });
       
-      //add event post 
       
-      
+      // Route to add a new past event (GET)
+      app.get('/addPastEvent', (req, res) => {
+        res.render('addPastEvent'); // Render the addPastEvent page
+      });
+
+      // Route to add a new past event (POST)
+      app.post('/addPastEvent', async (req, res) => {
+        const {
+          pasteventdate,
+          pasteventtime,
+          eventdurationhours,
+          pasteventaddress,
+          pasteventcity,
+          pasteventstate,
+          pasteventzipcode,
+          pasteventparticipants,
+          itemsproduced,
+          pockets,
+          collars,
+          envelopes,
+          vests,
+          completedproducts,
+        } = req.body;
+
+        try {
+          // Insert the new past event into the database
+          await knex('pastevents').insert({
+            pasteventdate,
+            pasteventtime,
+            eventdurationhours,
+            pasteventaddress,
+            pasteventcity,
+            pasteventstate,
+            pasteventzipcode,
+            pasteventparticipants,
+            itemsproduced,
+            pockets,
+            collars,
+            envelopes,
+            vests,
+            completedproducts,
+          });
+
+          res.redirect('/eventPastMaintenance'); // Redirect back to past events maintenance page
+        } catch (err) {
+          console.error('Error adding past event:', err);
+          res.status(500).send('Error adding past event.');
+        }
+      });
+
+
       // Route to render the eventMaintenance page
       app.get('/eventMaintenance', async (req, res) => {
         try {
@@ -169,14 +288,14 @@ app.get('/', (req, res) => {
           const pendingEvents = await knex('requestedevents')
         .select('*')
         .where({ approved: false })
-        .orderBy('requestid', 'desc');
+        .orderBy('eventdate', 'asc');
 
           // Fetch approved future events
           const approvedFutureEvents = await knex('requestedevents')
         .select('*')
         .where({ approved: true })
         .andWhere('eventdate', '>=', knex.fn.now())
-        .orderBy('requestid', 'desc');
+        .orderBy('eventdate', 'asc');
 
           res.render('eventMaintenance', { pendingEvents, approvedFutureEvents });
         } catch (err) {
@@ -186,12 +305,13 @@ app.get('/', (req, res) => {
       });
       
       
-        
       //edit event get
       // GET route to fetch a specific event for editing
       app.get('/editEvent/:id', async (req, res) => {
         const { id } = req.params;
         try {
+          const preferredActivities = await knex('requestedevents').distinct('preferredactivity');
+          const tableTypes = await knex('requestedevents').distinct(knex.raw('LOWER(tabletype) as tabletype'));
           // Fetch the specific event by ID
           const event = await knex('requestedevents')
         .select('*')
@@ -202,7 +322,7 @@ app.get('/', (req, res) => {
         return res.status(404).send('Event not found.');
           }
 
-          res.render('editEvent', { event });
+          res.render('editEvent', { event, preferredActivities, tableTypes });
         } catch (err) {
           console.error('Error fetching event for editing:', err);
           res.status(500).send('Error fetching event for editing.');
@@ -299,7 +419,7 @@ app.get('/', (req, res) => {
         try {
           // Fetch past events
           const pastEvents = await knex('pastevents').select('*')
-          .orderBy('eventid', 'desc');
+          .orderBy('pasteventdate', 'desc');
           res.render('eventPastMaintenance', { pastEvents });
         } catch (err) {
           console.error('Error fetching past events:', err);
@@ -348,8 +468,11 @@ app.get('/', (req, res) => {
           envelopes,
           vests,
           completedproducts,
-          updated,
+          
         } = req.body;
+
+        const updated = req.body.updated === 'true'; // Handle checkbox as boolean
+
 
         try {
           // Update the past event in the database

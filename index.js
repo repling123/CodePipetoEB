@@ -75,70 +75,71 @@ app.get('/', (req, res) => {
 
     /*ADMIN MAINTENANCE ROUTES*/
     // Route to fetch all admin users and render the admin maintenance page
-    app.get('/adminMaintenance', async (req, res) => {
-      try {
-        const result = await knex.select('*').from('adminusers');
-        console.log('Admin users fetched from DB:', result); // Log the fetched data
-        res.render('adminMaintenance', { adminusers: result });
-      } catch (error) {
-        console.error('Error fetching admin users:', error);
-        res.status(500).send('Error fetching admin users.');
-      }
-    });
+app.get('/adminMaintenance', async (req, res) => {
+  try {
+    const result = await knex.select('*').from('adminusers');
+    console.log('Admin users fetched from DB:', result); // Log the fetched data
+    res.render('adminMaintenance', { adminusers: result });
+  } catch (error) {
+    console.error('Error fetching admin users:', error);
+    res.status(500).send('Error fetching admin users.');
+  }
+});
 
-  // Route to add a new admin (GET)
-  app.get('/addAdmin', (req, res) => {
-    res.render('addAdmin'); // Render the addAdmin page
-  });
+// Route to add a new admin (GET)
+app.get('/addAdmin', (req, res) => {
+  res.render('addAdmin'); // Render the addAdmin page
+});
 
-  // Route to add a new admin (POST)
-  app.post('/addAdmin', async (req, res) => {
-    const { username, password } = req.body;
-    try {
-      await knex('adminusers').insert({ Username: username, Password: password });
-      res.redirect('/adminMaintenance');
-    } catch (error) {
-      console.error('Error adding admin user:', error);
-      res.status(500).send('Error adding admin user.');
-    }
-  });
+// Route to add a new admin (POST)
+app.post('/addAdmin', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    await knex('adminusers').insert({ Username: username, Password: password });
+    res.redirect('/adminMaintenance');
+  } catch (error) {
+    console.error('Error adding admin user:', error);
+    res.status(500).send('Error adding admin user.');
+  }
+});
 
-  // Route to edit an admin (GET)
-  app.get('/editAdmin/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-      const result = await knex('adminusers').where('UserID', id).first();
-      res.render('editAdmin', { user: result });
-    } catch (error) {
-      console.error('Error fetching admin user:', error);
-      res.status(500).send('Error fetching admin user.');
-    }
-  });
+// Route to edit an admin (GET)
+app.get('/editAdmin/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await knex('adminusers').where('UserID', id).first();
+    res.render('editAdmin', { user: result });
+  } catch (error) {
+    console.error('Error fetching admin user:', error);
+    res.status(500).send('Error fetching admin user.');
+  }
+});
 
-  // Route to edit an admin (POST)
-  app.post('/editAdmin/:id', async (req, res) => {
-    const { id } = req.params;
-    const { username, password } = req.body;
-    try {
-      await knex('adminusers').where('UserID', id).update({ Username: username, Password: password });
-      res.redirect('/adminMaintenance');
-    } catch (error) {
-      console.error('Error updating admin user:', error);
-      res.status(500).send('Error updating admin user.');
-    }
-  });
+// Route to edit an admin (POST)
+app.post('/editAdmin/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, password } = req.body;
+  try {
+    await knex('adminusers').where('UserID', id).update({ Username: username, Password: password });
+    res.redirect('/adminMaintenance');
+  } catch (error) {
+    console.error('Error updating admin user:', error);
+    res.status(500).send('Error updating admin user.');
+  }
+});
 
-  // Route to delete an admin (DELETE)
-  app.delete('/deleteAdmin/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-      await knex('adminusers').where('UserID', id).del();
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Error deleting admin user:', error);
-      res.status(500).json({ success: false, message: 'Error deleting admin user.' });
-    }
-  });
+// Route to delete an admin (POST)
+app.post('/deleteAdmin/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await knex('adminusers').where('UserID', id).del();
+    res.redirect('/adminMaintenance');
+  } catch (error) {
+    console.error('Error deleting admin user:', error);
+    res.status(500).send('Error deleting admin user.');
+  }
+});
+
 
 
     /*ADMIN VOLUNTEER MAINTENANCE ROUTES*/

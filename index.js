@@ -524,7 +524,9 @@ app.get('/', (req, res) => {
 /*HOW CAN I HELP ROUTES*/
   /*SIGN UP ROUTES*/
       //add volunteer get (same as admin voluteer add route)
-
+      app.get('/signup', (req, res) => {
+        res.render('signup');
+      })
       //add voluteer post form route
 
   /*REQUEST EVENT ROUTES*/

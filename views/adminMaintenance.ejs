@@ -5,37 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Maintenance</title>
   <link rel="stylesheet" href="/styles.css">
-    <style>
-        
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .action-buttons a {
-            margin-right: 10px;
-        }
-    </style>
+  <style>
+      .table-container {
+          overflow-x: auto;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+      }
+      th {
+          background-color: #f2f2f2;
+      }
+      .action-buttons a {
+          margin-right: 10px;
+      }
+      .dashboard-container {
+          margin-top: 20px;
+      }
+  </style>
 </head>
 <body>
-  <header>
     <nav>
       <a href="/">Home</a>
     </nav>
     <h1>Admin Maintenance</h1>
     <a href="/loginLanding" class="top-right-button">Back to Login</a>
-  </header>
 
   <main>
+    <!-- Admin Users Table -->
     <div class="table-container">
       <table>
         <thead>
@@ -47,30 +48,24 @@
         </thead>
         <tbody>
           <% adminusers.forEach(function(user) { %>
-            <tr>
-              <th>UserID</th>
-              <th>Username</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% adminusers.forEach(function(user) { %>
-              <tr>
-                <td><%= user.UserID %></td>
-                <td><%= user.Username %></td>
-                <td class="action-buttons">
-                  <a href="/editAdmin/<%= user.UserID %>" class="btn btn-edit">Edit</a>
-                  <form action="/deleteAdmin/<%= user.UserID %>" method="POST" style="display:inline;">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
-                  </form>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
-  
-      <a href="/addAdmin" class="btn btn-add">Add Admin</a>
-    </main>
-  </body>
-  </html>
+          <tr>
+            <td><%= user.UserID %></td>
+            <td><%= user.Username %></td>
+            <td class="action-buttons">
+              <a href="/editAdmin/<%= user.UserID %>" class="btn btn-edit">Edit</a>
+              <form action="/deleteAdmin/<%= user.UserID %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add Admin Button -->
+    <a href="/addAdmin" class="btn btn-add">Add Admin</a>
+    </div>
+  </main>
+</body>
+</html>

@@ -91,62 +91,6 @@
       background-color: #0056b3;
     }
 
-    #landing-page {
-      visibility: hidden;
-      margin-top: 2rem;
-      text-align: center;
-    }
-
-    #landing-page ul {
-      list-style: none; /* Remove bullet points */
-      padding: 0;
-    }
-
-    #landing-page li a {
-      display: block;
-      margin: 10px auto;
-      width: 200px;
-      text-align: center;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-    }
-
-    #landing-page li a:hover {
-      background-color: #0056b3;
-    }
-
-    .error-message {
-      color: red;
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      display: none; /* Initially hidden */
-      text-align: center;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .learn-more-btn {
-      display: block;
-      margin: 10px 0;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .learn-more-btn:hover {
-      background-color: #0056b3;
-    }
-
     #links ul {
       list-style: none; /* Remove bullet points */
       padding: 0;
@@ -156,99 +100,114 @@
       margin-top: 20px;
     }
 
+    /* Tableau Embed Container */
+    .tableau-container {
+      margin: 20px auto;
+      width: 100%;
+      max-width: 1200px;
+      text-align: center;
+    }
+
+    .tableau-container #tableauViz {
+      width: 100%;
+      height: 600px; /* Adjust height as needed */
+      border: 1px solid #ddd;
+    }
   </style>
 </head>
 <body>
-    <header>
-        <!-- Home Button -->
-        <nav>
-            <a href="/">Home</a>
-        </nav>
-      <div class="header-text">
-        <h1 id="main-title" class="main-title">Welcome</h1>
-        <p id="tagline" class="tagline">Please log in to continue.</p>
-      </div>
-  
-      <!-- Login box -->
-      <div id="login-box">
-        <form id="login-form" action="/login" method="POST">
-          <h2>Login</h2>
-  
-          <!-- Error message is hidden by default -->
-          <p id="error-message" class="error-message">Username or password is incorrect</p>
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" required>
-  
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required>
-  
-          <button type="submit" class="learn-more-btn">Login</button>
-        </form>
-      </div>
-  
-      <!-- Links section, initially hidden -->
-      <div id="links" class="hidden">
-        <ul>
-          <li><a href="/adminMaintenance" class="learn-more-btn">Admin Maintenance</a></li>
-          <li><a href="/volunteerMaintenance" class="learn-more-btn">Volunteer Maintenance</a></li>
-          <li><a href="/eventMaintenance" class="learn-more-btn">Event Maintenance</a></li>
-        </ul>
-      </div>
-    </header>
+  <header>
+    <!-- Home Button -->
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+    <div class="header-text">
+      <h1 id="main-title" class="main-title">Welcome</h1>
+      <p id="tagline" class="tagline">Please log in to continue.</p>
+    </div>
 
-    <script>
-      const form = document.getElementById('login-form');
-      const errorMessage = document.getElementById('error-message');
-      const links = document.getElementById('links');
-      const loginBox = document.getElementById('login-box');
-      const tagline = document.getElementById('tagline'); // Select the tagline element
-      const mainTitle = document.getElementById('main-title'); // Select the main title element
+    <!-- Login box -->
+    <div id="login-box">
+      <form id="login-form" action="/login" method="POST">
+        <h2>Login</h2>
+        <!-- Error message is hidden by default -->
+        <p id="error-message" class="error-message">Username or password is incorrect</p>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit" class="learn-more-btn">Login</button>
+      </form>
+    </div>
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Prevent form submission
+    <!-- Links section, initially hidden -->
+    <div id="links" class="hidden">
+      <ul>
+        <li><a href="/adminMaintenance" class="learn-more-btn">Admin Maintenance</a></li>
+        <li><a href="/volunteerMaintenance" class="learn-more-btn">Volunteer Maintenance</a></li>
+        <li><a href="/eventMaintenance" class="learn-more-btn">Event Maintenance</a></li>
+      </ul>
+    </div>
+  </header>
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+  <!-- Tableau Dashboard Section -->
+  <div class="tableau-container">
+    <h2>Dashboard</h2>
+    <div id="tableauViz"></div>
+  </div>
 
-        try {
-          const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-          });
+  <script>
+    const form = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
+    const links = document.getElementById('links');
+    const loginBox = document.getElementById('login-box');
+    const tagline = document.getElementById('tagline');
+    const mainTitle = document.getElementById('main-title');
 
-          const data = await response.json();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent form submission
 
-          if (data.success) {
-            loginBox.classList.add('hidden');
-            links.classList.remove('hidden');
-            tagline.textContent = 'View the data below'; // Update the tagline text
-            mainTitle.textContent = 'Welcome back'; // Update the main title text
-          } else {
-            errorMessage.textContent = data.message;
-            errorMessage.style.display = 'block';
-          }
-        } catch (error) {
-          errorMessage.textContent = 'An unexpected error occurred.';
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          loginBox.classList.add('hidden');
+          links.classList.remove('hidden');
+          tagline.textContent = 'View the data below';
+          mainTitle.textContent = 'Welcome back';
+        } else {
+          errorMessage.textContent = data.message;
           errorMessage.style.display = 'block';
         }
-      });
-    </script>
-      <script>
-        function initTableau() {
-          var placeholderDiv = document.getElementById('tableauViz');
-          var url = 'https://public.tableau.com/views/Intex_17333558878840/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link';
-          var options = {
-            width: placeholderDiv.offsetWidth,
-            height: placeholderDiv.offsetHeight,
-            hideTabs: true,
-            hideToolbar: true
-          };
-    
-          new tableau.Viz(placeholderDiv, url, options);
-        }
-    
-        document.addEventListener('DOMContentLoaded', initTableau);
-      </script>
+      } catch (error) {
+        errorMessage.textContent = 'An unexpected error occurred.';
+        errorMessage.style.display = 'block';
+      }
+    });
+
+    function initTableau() {
+      const placeholderDiv = document.getElementById('tableauViz');
+      const url = 'https://public.tableau.com/views/Intex_17333558878840/Dashboard1';
+      const options = {
+        width: placeholderDiv.offsetWidth,
+        height: 600,
+        hideTabs: true,
+        hideToolbar: true,
+      };
+      new tableau.Viz(placeholderDiv, url, options);
+    }
+
+    document.addEventListener('DOMContentLoaded', initTableau);
+  </script>
+  <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
 </body>
 </html>

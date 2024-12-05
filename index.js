@@ -55,30 +55,35 @@ app.get('/', (req, res) => {
     });
 });
 
-// Login Landing Page
-app.get('/loginLanding', (req, res) => {
-  res.render('loginLanding', { errorMessage: null }); // Render the login page with no error message
-});
+/*ADMIN LOGIN ROUTES*/
+    // Serve the login landing page (loginLanding.ejs)
+    app.get('/loginLanding', (req, res) => {
+      res.render('loginLanding', { errorMessage: null});  // Renders 'loginLanding.ejs' file
+    });
 
-// Login Route
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const user = await knex('adminusers').where({ username, password }).first();
-
-    if (user) {
-      req.session.userId = user.userid;
-      req.session.username = user.username;
-      res.json({ success: true }); // Send JSON response
-    } else {
-      res.json({ success: false, message: 'Invalid username or password' });
-    }
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
-  }
-});
+    //post for login
+    app.post('/login', async (req, res) => {
+      console.log('Received POST request for login', req.body); // Log the received data
+   
+      const { username, password } = req.body;
+   
+      try {
+        const user = await knex('adminusers')
+          .select('*')
+          .where({ username, password })
+          .first();
+        console.log('User fetched from DB:', user); // Log the user object fetched from DB
+   
+        if (user) {
+          res.json({ success: true, message: 'Login successful' });
+        } else {
+          res.json({ success: false, message: 'Username or password is incorrect' });
+        }
+      } catch (error) {
+        console.error('Error during database query:', error); // Log the error during the database query
+        res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
+      }
+    });
 
 // Admin Maintenance Page (no longer protected by session)
 app.get('/adminMaintenance', async (req, res) => {

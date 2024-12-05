@@ -66,7 +66,7 @@ app.post('/login', async (req, res) => {
 
   try {
     // Check if the provided username and password match an admin user in the database
-    const user = await knex('adminusers').where({ username, password }).first();
+    const user = await knex('adminusers').where({ username: username, password: password }).first();
 
     if (user) {
       res.redirect('/'); // Redirect to home page if login is successful

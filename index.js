@@ -42,43 +42,60 @@ app.get('/', (req, res) => {
   res.render('home');  // Renders 'home.ejs' file
 });
 
-/*ADMIN LOGIN ROUTES*/
-    // Serve the login landing page (loginLanding.ejs)
-    app.get('/loginLanding', (req, res) => {
-      res.render('loginLanding', { errorMessage: null});  // Renders 'loginLanding.ejs' file
-    });
+// In-memory object for login state
+const loggedInUsers = {};
 
-    //post for login
-    app.post('/login', async (req, res) => {
-      console.log('Received POST request for login', req.body); // Log the received data
-    
-      const { username, password } = req.body;
-    
-      try {
-        const user = await knex('adminusers')
-          .select('*')
-          .where({ username, password })
-          .first();
-        console.log('User fetched from DB:', user); // Log the user object fetched from DB
-    
-        if (user) {
-          res.json({ success: true, message: 'Login successful' });
-        } else {
-          res.json({ success: false, message: 'Username or password is incorrect' });
-        }
-      } catch (error) {
-        console.error('Error during database query:', error); // Log the error during the database query
-        res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
-      }
-    });
-    
+// Middleware to check authentication
+function isAuthenticated(req, res, next) {
+  const userId = req.body.userId || req.query.userId;
+  if (loggedInUsers[userId]) {
+    next();
+  } else {
+    res.redirect('/loginLanding'); // Redirect to login page if not authenticated
+  }
+}
 
-    /*ADMIN MAINTENANCE ROUTES*/
-    // Route to fetch all admin users and render the admin maintenance page
-app.get('/adminMaintenance', async (req, res) => {
+// Routes
+app.get('/', (req, res) => {
+  res.render('home'); // Render home page
+});
+
+// Login Landing Page
+app.get('/loginLanding', (req, res) => {
+  res.render('loginLanding', { errorMessage: null });
+});
+
+// Login Route
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const result = await knex.select('*').from('adminusers');
-    console.log('Admin users fetched from DB:', result); // Log the fetched data
+    const user = await knex('adminusers').where({ username, password }).first();
+    if (user) {
+      loggedInUsers[user.userid] = true; // Store login state
+      res.json({ success: true, userId: user.userid, message: 'Login successful' });
+    } else {
+      res.json({ success: false, message: 'Invalid username or password' });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
+  }
+});
+
+// Logout Route
+app.get('/logout', (req, res) => {
+  const userId = req.query.userId;
+  if (loggedInUsers[userId]) {
+    delete loggedInUsers[userId]; // Remove user from loggedInUsers
+  }
+  res.redirect('/loginLanding');
+});
+
+// Admin Maintenance Page
+app.get('/adminMaintenance', isAuthenticated, async (req, res) => {
+  try {
+    const result = await knex('adminusers').select('*');
     res.render('adminMaintenance', { adminusers: result });
   } catch (error) {
     console.error('Error fetching admin users:', error);
@@ -86,56 +103,57 @@ app.get('/adminMaintenance', async (req, res) => {
   }
 });
 
-// Route to add a new admin (GET)
-app.get('/addAdmin', (req, res) => {
-  res.render('addAdmin'); // Render the addAdmin page
+// Add Admin (GET)
+app.get('/addAdmin', isAuthenticated, (req, res) => {
+  res.render('addAdmin');
 });
 
-// Route to add a new admin (POST)
-app.post('/addAdmin', async (req, res) => {
+// Add Admin (POST)
+app.post('/addAdmin', isAuthenticated, async (req, res) => {
   const { username, password } = req.body;
+
   try {
-    await knex('adminusers').insert({ username, password }); // Inserts data into the database
-    res.redirect('/adminMaintenance'); // Redirects back to the admin maintenance page
+    await knex('adminusers').insert({ username, password });
+    res.redirect('/adminMaintenance');
   } catch (error) {
     console.error('Error adding admin user:', error);
     res.status(500).send('Error adding admin user.');
   }
 });
 
-
-// Route to fetch a specific admin for editing (GET)
-app.get('/editAdmin/:id', async (req, res) => {
+// Edit Admin (GET)
+app.get('/editAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
+
   try {
-    const result = await knex('adminusers').where('userid', id).first(); // Match lowercase column names
-    res.render('editAdmin', { user: result }); // Pass user data to the EJS template
+    const user = await knex('adminusers').where('userid', id).first();
+    res.render('editAdmin', { user });
   } catch (error) {
     console.error('Error fetching admin user:', error);
     res.status(500).send('Error fetching admin user.');
   }
 });
 
-
-// Route to update a specific admin (POST)
-app.post('/editAdmin/:id', async (req, res) => {
+// Edit Admin (POST)
+app.post('/editAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
+
   try {
-    await knex('adminusers').where('userid', id).update({ username: username, password: password }); // Update user
-    res.redirect('/adminMaintenance'); // Redirect to Admin Maintenance after saving
+    await knex('adminusers').where('userid', id).update({ username, password });
+    res.redirect('/adminMaintenance');
   } catch (error) {
     console.error('Error updating admin user:', error);
     res.status(500).send('Error updating admin user.');
   }
 });
 
-
-// Route to delete an admin (POST)
-app.post('/deleteAdmin/:id', async (req, res) => {
+// Delete Admin (POST)
+app.post('/deleteAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
+
   try {
-    await knex('adminusers').where('userid', id).del(); // Lowercase column names
+    await knex('adminusers').where('userid', id).del();
     res.redirect('/adminMaintenance');
   } catch (error) {
     console.error('Error deleting admin user:', error);

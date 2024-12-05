@@ -1,11 +1,21 @@
 let express = require('express');
 let app = express();
-const session = require('express-session'); // Import express-session
 const path = require('path');
 const PORT = process.env.PORT || 3000
 // grab html form from file 
-// allows to pull JSON data from form 
-app.use(express.urlencoded( {extended: true} )); 
+// allows to pull JSON data from form  
+
+// Middleware to parse form and JSON data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Middleware to serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/Images', express.static(path.join(__dirname, 'Images')));
+
+// Configure EJS
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 const knex = require("knex") ({
   client : "pg",
@@ -29,41 +39,6 @@ const knex = require("knex") ({
 }
 })
 
-// Middleware to parse form and JSON data
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-// Configure express-session (only once)
-app.use(
-  session({
-    secret: 'your-secret-key', // Replace with a strong secret
-    resave: false, // Don't resave session if unmodified
-    saveUninitialized: false, // Don't save empty sessions
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 2, // Session expiration: 2 hours
-      httpOnly: true, // Prevent client-side JavaScript access
-      secure: false, // Set true if using HTTPS
-    },
-  })
-);
-
-// Middleware to serve static files
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/Images', express.static(path.join(__dirname, 'Images')));
-
-// Configure EJS
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-// Middleware for Authentication
-function isAuthenticated(req, res, next) {
-  if (req.session.userId) {
-    next(); // User is logged in
-  } else {
-    res.redirect('/loginLanding'); // Redirect to login page
-  }
-}
-
 // Routes
 
 // Home Page
@@ -82,7 +57,7 @@ app.get('/', (req, res) => {
 
 // Login Landing Page
 app.get('/loginLanding', (req, res) => {
-  res.render('loginLanding', { errorMessage: null });
+  res.render('loginLanding', { errorMessage: null }); // Render the login page with no error message
 });
 
 // Login Route
@@ -90,14 +65,13 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    // Check if the provided username and password match an admin user in the database
     const user = await knex('adminusers').where({ username, password }).first();
 
     if (user) {
-      req.session.userId = user.userid; // Store user ID in the session
-      req.session.username = user.username; // Optionally store username
-      res.redirect('/'); // Redirect to home page
+      res.redirect('/'); // Redirect to home page if login is successful
     } else {
-      res.render('loginLanding', { errorMessage: 'Invalid username or password' });
+      res.render('loginLanding', { errorMessage: 'Invalid username or password' }); // Show error if login fails
     }
   } catch (error) {
     console.error('Login error:', error);
@@ -105,81 +79,74 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Logout Route
-app.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error destroying session:', err);
-      res.status(500).send('Error logging out.');
-    } else {
-      res.redirect('/loginLanding');
-    }
-  });
-});
-
-// Admin Maintenance Page (Protected)
-app.get('/adminMaintenance', isAuthenticated, async (req, res) => {
+// Admin Maintenance Page (no longer protected by session)
+app.get('/adminMaintenance', async (req, res) => {
   try {
+    // Fetch all admin users from the database
     const result = await knex('adminusers').select('*');
-    res.render('adminMaintenance', { adminusers: result });
+    res.render('adminMaintenance', { adminusers: result }); // Render admin maintenance page
   } catch (error) {
     console.error('Error fetching admin users:', error);
     res.status(500).send('Error fetching admin users.');
   }
 });
 
-// Add Admin (GET, Protected)
-app.get('/addAdmin', isAuthenticated, (req, res) => {
-  res.render('addAdmin');
+// Add Admin (GET)
+app.get('/addAdmin', (req, res) => {
+  res.render('addAdmin'); // Render add admin page
 });
 
-// Add Admin (POST, Protected)
-app.post('/addAdmin', isAuthenticated, async (req, res) => {
+// Add Admin (POST)
+app.post('/addAdmin', async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    // Insert new admin user into the database
     await knex('adminusers').insert({ username, password });
-    res.redirect('/adminMaintenance');
+    res.redirect('/adminMaintenance'); // Redirect to admin maintenance page after adding
   } catch (error) {
     console.error('Error adding admin user:', error);
     res.status(500).send('Error adding admin user.');
   }
 });
 
-// Edit Admin (GET, Protected)
-app.get('/editAdmin/:id', isAuthenticated, async (req, res) => {
+// Edit Admin (GET)
+app.get('/editAdmin/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Fetch the admin user to be edited based on their ID
     const user = await knex('adminusers').where('userid', id).first();
-    res.render('editAdmin', { user });
+    res.render('editAdmin', { user }); // Render the edit page with user data
   } catch (error) {
     console.error('Error fetching admin user:', error);
     res.status(500).send('Error fetching admin user.');
   }
 });
 
-// Edit Admin (POST, Protected)
-app.post('/editAdmin/:id', isAuthenticated, async (req, res) => {
+// Edit Admin (POST)
+app.post('/editAdmin/:id', async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
 
   try {
+    // Update the admin user's data in the database
     await knex('adminusers').where('userid', id).update({ username, password });
-    res.redirect('/adminMaintenance');
+    res.redirect('/adminMaintenance'); // Redirect to admin maintenance page after editing
   } catch (error) {
     console.error('Error updating admin user:', error);
     res.status(500).send('Error updating admin user.');
   }
 });
 
-// Delete Admin (POST, Protected)
-app.post('/deleteAdmin/:id', isAuthenticated, async (req, res) => {
+// Delete Admin (POST)
+app.post('/deleteAdmin/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Delete the admin user from the database
     await knex('adminusers').where('userid', id).del();
-    res.redirect('/adminMaintenance');
+    res.redirect('/adminMaintenance'); // Redirect to admin maintenance page after deletion
   } catch (error) {
     console.error('Error deleting admin user:', error);
     res.status(500).send('Error deleting admin user.');

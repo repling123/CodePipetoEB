@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Past Events Maintenance</title>
     <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="/Images/logo.png" type="image/png">
     <style>
         
         .table-container {
@@ -33,6 +34,11 @@
             <form action="/addPastEvent" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
                 <button class="edit-button" type="submit">Add Past Event</button>
               </form>
+
+              <form action="/migratePastEvents" method="POST" style="display: flex; justify-content: center; margin: 20px 0;">
+                <button class="edit-button" type="submit">Update Past Events</button>
+            </form>
+
             <table class="events-table">
                 <thead>
                     <tr>

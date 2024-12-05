@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Volunteer</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        main {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Edit Volunteer</h1>
+        <form action="/editVolunteer/<%= volunteer.volunteerid %>" method="POST">
+            <div class="form-group">
+                <label for="volunteerfirstname">First Name:</label>
+                <input type="text" id="volunteerfirstname" name="volunteerfirstname" value="<%= volunteer.volunteerfirstname %>" required>
+            </div>
+            <div class="form-group">
+                <label for="volunteerlastname">Last Name:</label>
+                <input type="text" id="volunteerlastname" name="volunteerlastname" value="<%= volunteer.volunteerlastname %>" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<%= volunteer.email %>" required>
+            </div>
+            <div class="form-group">
+                <label for="phonenumber">Phone Number:</label>
+                <input type="tel" id="phonenumber" name="phonenumber" value="<%= volunteer.phonenumber %>" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" value="<%= volunteer.age %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <div>
+                    <label>
+                        <input type="radio" id="genderMale" name="gender" value="Male" <%= volunteer.gender === 'Male' ? 'checked' : '' %>> Male
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" id="genderFemale" name="gender" value="Female" <%= volunteer.gender === 'Female' ? 'checked' : '' %>> Female
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" id="genderOther" name="gender" value="Other" <%= volunteer.gender === 'Other' ? 'checked' : '' %>> Other
+                    </label>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" value="<%= volunteer.address %>" required>
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" value="<%= volunteer.city %>" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <select id="state" name="state" required>
+                    <option value="AL" <%= volunteer.state === 'AL' ? 'selected' : '' %>>Alabama</option>
+                    <option value="AK" <%= volunteer.state === 'AK' ? 'selected' : '' %>>Alaska</option>
+                    <option value="AZ" <%= volunteer.state === 'AZ' ? 'selected' : '' %>>Arizona</option>
+                    <option value="AR" <%= volunteer.state === 'AR' ? 'selected' : '' %>>Arkansas</option>
+                    <option value="CA" <%= volunteer.state === 'CA' ? 'selected' : '' %>>California</option>
+                    <option value="CO" <%= volunteer.state === 'CO' ? 'selected' : '' %>>Colorado</option>
+                    <option value="CT" <%= volunteer.state === 'CT' ? 'selected' : '' %>>Connecticut</option>
+                    <option value="DE" <%= volunteer.state === 'DE' ? 'selected' : '' %>>Delaware</option>
+                    <option value="FL" <%= volunteer.state === 'FL' ? 'selected' : '' %>>Florida</option>
+                    <option value="GA" <%= volunteer.state === 'GA' ? 'selected' : '' %>>Georgia</option>
+                    <option value="HI" <%= volunteer.state === 'HI' ? 'selected' : '' %>>Hawaii</option>
+                    <option value="ID" <%= volunteer.state === 'ID' ? 'selected' : '' %>>Idaho</option>
+                    <option value="IL" <%= volunteer.state === 'IL' ? 'selected' : '' %>>Illinois</option>
+                    <option value="IN" <%= volunteer.state === 'IN' ? 'selected' : '' %>>Indiana</option>
+                    <option value="IA" <%= volunteer.state === 'IA' ? 'selected' : '' %>>Iowa</option>
+                    <option value="KS" <%= volunteer.state === 'KS' ? 'selected' : '' %>>Kansas</option>
+                    <option value="KY" <%= volunteer.state === 'KY' ? 'selected' : '' %>>Kentucky</option>
+                    <option value="LA" <%= volunteer.state === 'LA' ? 'selected' : '' %>>Louisiana</option>
+                    <option value="ME" <%= volunteer.state === 'ME' ? 'selected' : '' %>>Maine</option>
+                    <option value="MD" <%= volunteer.state === 'MD' ? 'selected' : '' %>>Maryland</option>
+                    <option value="MA" <%= volunteer.state === 'MA' ? 'selected' : '' %>>Massachusetts</option>
+                    <option value="MI" <%= volunteer.state === 'MI' ? 'selected' : '' %>>Michigan</option>
+                    <option value="MN" <%= volunteer.state === 'MN' ? 'selected' : '' %>>Minnesota</option>
+                    <option value="MS" <%= volunteer.state === 'MS' ? 'selected' : '' %>>Mississippi</option>
+                    <option value="MO" <%= volunteer.state === 'MO' ? 'selected' : '' %>>Missouri</option>
+                    <option value="MT" <%= volunteer.state === 'MT' ? 'selected' : '' %>>Montana</option>
+                    <option value="NE" <%= volunteer.state === 'NE' ? 'selected' : '' %>>Nebraska</option>
+                    <option value="NV" <%= volunteer.state === 'NV' ? 'selected' : '' %>>Nevada</option>
+                    <option value="NH" <%= volunteer.state === 'NH' ? 'selected' : '' %>>New Hampshire</option>
+                    <option value="NJ" <%= volunteer.state === 'NJ' ? 'selected' : '' %>>New Jersey</option>
+                    <option value="NM" <%= volunteer.state === 'NM' ? 'selected' : '' %>>New Mexico</option>
+                    <option value="NY" <%= volunteer.state === 'NY' ? 'selected' : '' %>>New York</option>
+                    <option value="NC" <%= volunteer.state === 'NC' ? 'selected' : '' %>>North Carolina</option>
+                    <option value="ND" <%= volunteer.state === 'ND' ? 'selected' : '' %>>North Dakota</option>
+                    <option value="OH" <%= volunteer.state === 'OH' ? 'selected' : '' %>>Ohio</option>
+                    <option value="OK" <%= volunteer.state === 'OK' ? 'selected' : '' %>>Oklahoma</option>
+                    <option value="OR" <%= volunteer.state === 'OR' ? 'selected' : '' %>>Oregon</option>
+                    <option value="PA" <%= volunteer.state === 'PA' ? 'selected' : '' %>>Pennsylvania</option>
+                    <option value="RI" <%= volunteer.state === 'RI' ? 'selected' : '' %>>Rhode Island</option>
+                    <option value="SC" <%= volunteer.state === 'SC' ? 'selected' : '' %>>South Carolina</option>
+                    <option value="SD" <%= volunteer.state === 'SD' ? 'selected' : '' %>>South Dakota</option>
+                    <option value="TN" <%= volunteer.state === 'TN' ? 'selected' : '' %>>Tennessee</option>
+                    <option value="TX" <%= volunteer.state === 'TX' ? 'selected' : '' %>>Texas</option>
+                    <option value="UT" <%= volunteer.state === 'UT' ? 'selected' : '' %>>Utah</option>
+                    <option value="VT" <%= volunteer.state === 'VT' ? 'selected' : '' %>>Vermont</option>
+                    <option value="VA" <%= volunteer.state === 'VA' ? 'selected' : '' %>>Virginia</option>
+                    <option value="WA" <%= volunteer.state === 'WA' ? 'selected' : '' %>>Washington</option>
+                    <option value="WV" <%= volunteer.state === 'WV' ? 'selected' : '' %>>West Virginia</option>
+                    <option value="WI" <%= volunteer.state === 'WI' ? 'selected' : '' %>>Wisconsin</option>
+                    <option value="WY" <%= volunteer.state === 'WY' ? 'selected' : '' %>>Wyoming</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="zipcode">Zipcode:</label>
+                <input type="text" id="zipcode" name="zipcode" value="<%= volunteer.zipcode %>" required>
+            </div>
+            <div class="form-group">
+                <label for="placeheard">How did you hear about us?</label>
+                <select id="placeheard" name="placeheard" required>
+                    <option value="Community Event" <%= volunteer.placeheard === 'Community Event' ? 'selected' : '' %>>Community Event</option>
+                    <option value="Church Event" <%= volunteer.placeheard === 'Church Event' ? 'selected' : '' %>>Church Event</option>
+                    <option value="Social Media" <%= volunteer.placeheard === 'Social Media' ? 'selected' : '' %>>Social Media</option>
+                    <option value="Flyer" <%= volunteer.placeheard === 'Flyer' ? 'selected' : '' %>>Flyer</option>
+                    <option value="Online Ad" <%= volunteer.placeheard === 'Online Ad' ? 'selected' : '' %>>Online Ad</option>
+                    <option value="Friend/Family" <%= volunteer.placeheard === 'Friend/Family' ? 'selected' : '' %>>Friend/Family</option>
+                    <option value="Other" <%= volunteer.placeheard === 'Other' ? 'selected' : '' %>>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hourspermonth">How many hours a month would you like to volunteer for?</label>
+                <input type="number" id="hourspermonth" name="hourspermonth" value="<%= volunteer.hourspermonth %>" required>
+            </div>
+            <div class="form-group">
+                <label for="preferreddays">What days do you prefer to volunteer on?</label>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Mon" <%= volunteer.preferreddays.includes('Mon') ? 'checked' : '' %>> Monday
+                </label><br>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Tue" <%= volunteer.preferreddays.includes('Tue') ? 'checked' : '' %>> Tuesday
+                </label><br>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Wed" <%= volunteer.preferreddays.includes('Wed') ? 'checked' : '' %>> Wednesday
+                </label><br>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Thu" <%= volunteer.preferreddays.includes('Thu') ? 'checked' : '' %>> Thursday
+                </label><br>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Fri" <%= volunteer.preferreddays.includes('Fri') ? 'checked' : '' %>> Friday
+                </label><br>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Sat" <%= volunteer.preferreddays.includes('Sat') ? 'checked' : '' %>> Saturday
+                </label><br>
+                <label>
+                    <input type="checkbox" name="volunteerDays[]" value="Sun" <%= volunteer.preferreddays.includes('Sun') ? 'checked' : '' %>> Sunday
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="preferredtime">What is your preferred time to volunteer?</label>
+                <select id="preferredtime" name="preferredtime" required>
+                    <option value="Morning" <%= volunteer.preferredtime === 'Morning' ? 'selected' : '' %>>Morning</option>
+                    <option value="Afternoon" <%= volunteer.preferredtime === 'Afternoon' ? 'selected' : '' %>>Afternoon</option>
+                    <option value="Evening" <%= volunteer.preferredtime === 'Evening' ? 'selected' : '' %>>Evening</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="commitment">What is your commitment level for volunteering?</label>
+                <select id="commitment" name="commitment" required>
+                    <option value="Long-Term" <%= volunteer.commitment === 'Long-Term' ? 'selected' : '' %>>Long-Term</option>
+                    <option value="Short-Term" <%= volunteer.commitment === 'Short-Term' ? 'selected' : '' %>>Short-Term</option>
+                    <option value="One-Time" <%= volunteer.commitment === 'One-Time' ? 'selected' : '' %>>One-Time</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="leadership">
+                    Do you want to be in a leadership position?
+                    <input type="checkbox" id="leadership" name="leadership" value="true" <%= volunteer.leadership ? 'checked' : '' %>>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="sewinglevel">What is your sewing level?</label>
+                <select id="sewinglevel" name="sewinglevel" required>
+                    <option value="Beginner" <%= volunteer.sewinglevel === 'Beginner' ? 'selected' : '' %>>Beginner</option>
+                    <option value="Intermediate" <%= volunteer.sewinglevel === 'Intermediate' ? 'selected' : '' %>>Intermediate</option>
+                    <option value="Experienced" <%= volunteer.sewinglevel === 'Experienced' ? 'selected' : '' %>>Experienced</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="teachsewing">
+                    Would you be comfortable teaching participants how to sew?
+                    <input type="checkbox" id="teachsewing" name="teachsewing" value="true" <%= volunteer.teachsewing ? 'checked' : '' %>>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="cantravel">
+                    Are you willing to travel for events?
+                    <input type="checkbox" id="cantravel" name="cantravel" value="true" <%= volunteer.cantravel ? 'checked' : '' %>>
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit">Save Changes</button>
+                <a href="/volunteerMaintenance" class="button">Cancel</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html></select>

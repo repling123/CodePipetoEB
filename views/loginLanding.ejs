@@ -39,7 +39,7 @@
     .header-text .tagline {
       font-size: 1.2rem;
       font-style: italic;
-      color: #ddd;
+      color: #000000;
     }
 
     #login-box, #links, .tableau-container {
@@ -169,7 +169,6 @@
 
         if (data.success) {
           // Hide login box
-          // On successful login
           loginBox.classList.add('hidden');
 
           // Show links and tableau section
@@ -189,7 +188,7 @@
       } catch (error) {
         // Handle unexpected errors
         errorMessage.textContent = 'An unexpected error occurred.';
-        errorMessage.classList.remove('hidden');
+        errorMessage.style.display = 'block';
       }
     });
 
@@ -208,4 +207,3 @@
   <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
 </body>
 </html>
-

@@ -27,6 +27,7 @@
     </style>
 </head>
 <body>
+<<<<<<< HEAD
   <header>
     <nav>
       <a href="/">Home</a>
@@ -47,44 +48,36 @@
         </thead>
         <tbody>
           <% adminusers.forEach(function(user) { %>
+=======
+    <main>
+      <div class="table-container">
+        <table>
+          <thead>
+>>>>>>> 642729801584198f9ef3c7ad9b60325171170fd3
             <tr>
-              <td><%= user.UserID %></td>
-              <td><%= user.Username %></td>
-              <td class="action-buttons">
-                <a href="/editAdmin/<%= user.UserID %>" class="btn btn-edit">Edit</a>
-                <form action="/deleteAdmin/<%= user.UserID %>" method="POST" style="display:inline;">
-                  <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
-                </form>
-              </td>
+              <th>UserID</th>
+              <th>Username</th>
+              <th>Actions</th>
             </tr>
-          <% }); %>
-        </tbody>
-      </table>
-    </div>
-
-    <a href="/addAdmin" class="btn btn-add">Add Admin</a>
-  </main>
-
-  <script>
-    function confirmDelete(id) {
-      if (confirm('Are you sure you want to delete this user?')) {
-        fetch(`/deleteAdmin/${id}`, {
-          method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            location.reload();
-          } else {
-            alert('Failed to delete user.');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred while deleting the user.');
-        });
-      }
-    }
-  </script>
-</body>
-</html>
+          </thead>
+          <tbody>
+            <% adminusers.forEach(function(user) { %>
+              <tr>
+                <td><%= user.UserID %></td>
+                <td><%= user.Username %></td>
+                <td class="action-buttons">
+                  <a href="/editAdmin/<%= user.UserID %>" class="btn btn-edit">Edit</a>
+                  <form action="/deleteAdmin/<%= user.UserID %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+  
+      <a href="/addAdmin" class="btn btn-add">Add Admin</a>
+    </main>
+  </body>
+  </html>

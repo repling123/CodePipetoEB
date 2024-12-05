@@ -68,7 +68,16 @@ function isAuthenticated(req, res, next) {
 
 // Home Page
 app.get('/', (req, res) => {
-  res.render('home');
+  knex('pastevents')
+      .sum('completedproducts as total') // Alias the sum as 'total'
+      .then(result => {
+          const products = result[0].total || 0; // Safely access the sum value and default to 0 if null
+          res.render('home', { products }); // Pass the sum to the template
+      })
+      .catch(error => {
+          console.error('Error querying database:', error);
+          res.status(500).send('Internal Server Error');
+      });
 });
 
 // Login Landing Page

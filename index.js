@@ -1,7 +1,6 @@
 let express = require('express');
 let app = express();
-const session = require('express-session'); // Import express-session
-let path = require('path');
+const session = require('express-session'); // Import express-sessionlet path = require('path');
 const PORT = process.env.PORT || 3000
 // grab html form from file 
 // allows to pull JSON data from form 
@@ -47,7 +46,24 @@ app.use(
   })
 );
 
-// Static file serving
+// Middleware to serve static files
+app.use(express.static('public'));
+
+// Configure express-session
+app.use(
+  session({
+    secret: 'your-secret-key', // Replace with a strong secret
+    resave: false, // Don't resave session if unmodified
+    saveUninitialized: false, // Don't save empty sessions
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 2, // Session expiration: 2 hours
+      httpOnly: true, // Prevent client-side JavaScript access
+      secure: false, // Set true if using HTTPS
+    },
+  })
+);
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Images', express.static(path.join(__dirname, 'Images')));
 
@@ -95,13 +111,13 @@ app.post('/login', async (req, res) => {
     if (user) {
       req.session.userId = user.userid; // Store user ID in the session
       req.session.username = user.username; // Optionally store username
-      res.json({ success: true, message: 'Login successful' });
+      res.redirect('/'); // Redirect to home page
     } else {
-      res.json({ success: false, message: 'Invalid username or password' });
+      res.render('loginLanding', { errorMessage: 'Invalid username or password' });
     }
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
+    res.status(500).send('An error occurred. Please try again.');
   }
 });
 
@@ -117,134 +133,74 @@ app.get('/logout', (req, res) => {
   });
 });
 
-// Global variable for security
-let security = false; // Set to true when the user logs in successfully
-
-// Admin Maintenance Page
-app.get('/adminMaintenance', (req, res) => {
-  if (!security) {
-    return res.redirect('/loginLanding'); // Redirect to login if not authenticated
-  }
+// Admin Maintenance Page (Protected)
+app.get('/adminMaintenance', isAuthenticated, async (req, res) => {
   try {
-    knex('adminusers')
-      .select('*')
-      .then((result) => {
-        res.render('adminMaintenance', { adminusers: result });
-      })
-      .catch((error) => {
-        console.error('Error fetching admin users:', error);
-        res.status(500).send('Error fetching admin users.');
-      });
+    const result = await knex('adminusers').select('*');
+    res.render('adminMaintenance', { adminusers: result });
   } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send('Unexpected error occurred.');
+    console.error('Error fetching admin users:', error);
+    res.status(500).send('Error fetching admin users.');
   }
 });
 
-// Add Admin (GET)
-app.get('/addAdmin', (req, res) => {
-  if (!security) {
-    return res.redirect('/loginLanding'); // Redirect to login if not authenticated
-  }
+// Add Admin (GET, Protected)
+app.get('/addAdmin', isAuthenticated, (req, res) => {
   res.render('addAdmin');
 });
 
-// Add Admin (POST)
-app.post('/addAdmin', (req, res) => {
-  if (!security) {
-    return res.redirect('/loginLanding'); // Redirect to login if not authenticated
-  }
+// Add Admin (POST, Protected)
+app.post('/addAdmin', isAuthenticated, async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    knex('adminusers')
-      .insert({ username, password })
-      .then(() => {
-        res.redirect('/adminMaintenance');
-      })
-      .catch((error) => {
-        console.error('Error adding admin user:', error);
-        res.status(500).send('Error adding admin user.');
-      });
+    await knex('adminusers').insert({ username, password });
+    res.redirect('/adminMaintenance');
   } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send('Unexpected error occurred.');
+    console.error('Error adding admin user:', error);
+    res.status(500).send('Error adding admin user.');
   }
 });
 
-// Edit Admin (GET)
-app.get('/editAdmin/:id', (req, res) => {
-  if (!security) {
-    return res.redirect('/loginLanding'); // Redirect to login if not authenticated
-  }
+// Edit Admin (GET, Protected)
+app.get('/editAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
 
   try {
-    knex('adminusers')
-      .where('userid', id)
-      .first()
-      .then((user) => {
-        res.render('editAdmin', { user });
-      })
-      .catch((error) => {
-        console.error('Error fetching admin user:', error);
-        res.status(500).send('Error fetching admin user.');
-      });
+    const user = await knex('adminusers').where('userid', id).first();
+    res.render('editAdmin', { user });
   } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send('Unexpected error occurred.');
+    console.error('Error fetching admin user:', error);
+    res.status(500).send('Error fetching admin user.');
   }
 });
 
-// Edit Admin (POST)
-app.post('/editAdmin/:id', (req, res) => {
-  if (!security) {
-    return res.redirect('/loginLanding'); // Redirect to login if not authenticated
-  }
+// Edit Admin (POST, Protected)
+app.post('/editAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
 
   try {
-    knex('adminusers')
-      .where('userid', id)
-      .update({ username, password })
-      .then(() => {
-        res.redirect('/adminMaintenance');
-      })
-      .catch((error) => {
-        console.error('Error updating admin user:', error);
-        res.status(500).send('Error updating admin user.');
-      });
+    await knex('adminusers').where('userid', id).update({ username, password });
+    res.redirect('/adminMaintenance');
   } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send('Unexpected error occurred.');
+    console.error('Error updating admin user:', error);
+    res.status(500).send('Error updating admin user.');
   }
 });
 
-// Delete Admin (POST)
-app.post('/deleteAdmin/:id', (req, res) => {
-  if (!security) {
-    return res.redirect('/loginLanding'); // Redirect to login if not authenticated
-  }
+// Delete Admin (POST, Protected)
+app.post('/deleteAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
 
   try {
-    knex('adminusers')
-      .where('userid', id)
-      .del()
-      .then(() => {
-        res.redirect('/adminMaintenance');
-      })
-      .catch((error) => {
-        console.error('Error deleting admin user:', error);
-        res.status(500).send('Error deleting admin user.');
-      });
+    await knex('adminusers').where('userid', id).del();
+    res.redirect('/adminMaintenance');
   } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send('Unexpected error occurred.');
+    console.error('Error deleting admin user:', error);
+    res.status(500).send('Error deleting admin user.');
   }
 });
-
 
 
 

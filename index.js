@@ -65,17 +65,18 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Check if the provided username and password match an admin user in the database
-    const user = await knex('adminusers').where({ username: username, password: password }).first();
+    const user = await knex('adminusers').where({ username, password }).first();
 
     if (user) {
-      res.redirect('/'); // Redirect to home page if login is successful
+      req.session.userId = user.userid;
+      req.session.username = user.username;
+      res.json({ success: true }); // Send JSON response
     } else {
-      res.render('loginLanding', { errorMessage: 'Invalid username or password' }); // Show error if login fails
+      res.json({ success: false, message: 'Invalid username or password' });
     }
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).send('An error occurred. Please try again.');
+    res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
   }
 });
 

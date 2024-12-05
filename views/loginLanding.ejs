@@ -17,16 +17,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; /* Move content to the top */
-      padding-top: 40px; /* Add space at the top */
-      /* Optional: add a semi-transparent overlay for better text readability */
+      justify-content: flex-start;
+      padding-top: 40px;
       background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url('/Images/Home-Page-Header.jpg');
     }
 
     .header-text {
       text-align: center;
-      margin-bottom: 20px; /* Space between text and login box */
+      margin-bottom: 20px;
     }
 
     .header-text .main-title {
@@ -45,62 +44,42 @@
 
     #login-box {
       max-width: 400px;
-      width: 90%; /* Make responsive for smaller screens */
+      width: 90%;
       background-color: white;
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       text-align: center;
-      margin: 0 auto; /* Center the login box */
+      margin: 0 auto;
     }
 
-    #login-box h2 {
-      color: #333;
-      margin-bottom: 1rem;
-    }
-
-    #login-box label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-      color: #333;
-    }
-
-    #login-box input {
-      width: calc(100% - 20px); /* Adjust width to fit within padding */
-      padding: 10px;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box; /* Ensure padding is included in width */
-    }
-
-    .learn-more-btn {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .learn-more-btn:hover {
-      background-color: #0056b3;
+    #login-box.hidden, #links.hidden, .tableau-container.hidden {
+      display: none;
     }
 
     #links ul {
-      list-style: none; /* Remove bullet points */
+      list-style: none;
       padding: 0;
     }
 
-    #links {
-      margin-top: 20px;
+    #links ul li a {
+      display: block;
+      margin: 10px auto;
+      width: 200px;
+      text-align: center;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s;
     }
 
-    /* Tableau Embed Container */
+    #links ul li a:hover {
+      background-color: #0056b3;
+    }
+
     .tableau-container {
       margin: 20px auto;
       width: 100%;
@@ -110,14 +89,8 @@
 
     .tableau-container #tableauViz {
       width: 100%;
-      height: 600px; /* Adjust height as needed */
+      height: 600px;
       border: 1px solid #ddd;
-    }
-
-    .tableau-container {
-      margin-top: 20px;
-      width: 100%;
-      height: 600px; /* Set a fixed height for the Tableau container */
     }
   </style>
 </head>
@@ -135,8 +108,7 @@
     <div id="login-box">
       <form id="login-form" action="/login" method="POST">
         <h2>Login</h2>
-        <!-- Error message is hidden by default -->
-        <p id="error-message" class="error-message">Username or password is incorrect</p>
+        <p id="error-message" class="error-message" style="display: none;">Username or password is incorrect</p>
         <label for="username">Username</label>
         <input type="text" id="username" name="username" required>
         <label for="password">Password</label>
@@ -145,7 +117,7 @@
       </form>
     </div>
 
-    <!-- Links section, initially hidden -->
+    <!-- Links section -->
     <div id="links" class="hidden">
       <ul>
         <li><a href="/adminMaintenance" class="learn-more-btn">Admin Maintenance</a></li>
@@ -156,7 +128,7 @@
   </header>
 
   <!-- Tableau Dashboard Section -->
-  <div class="tableau-container">
+  <div class="tableau-container hidden" id="tableau-section">
     <h2>Dashboard</h2>
     <div id="tableauViz"></div>
   </div>
@@ -166,6 +138,7 @@
     const errorMessage = document.getElementById('error-message');
     const links = document.getElementById('links');
     const loginBox = document.getElementById('login-box');
+    const tableauSection = document.getElementById('tableau-section');
     const tagline = document.getElementById('tagline');
     const mainTitle = document.getElementById('main-title');
 
@@ -185,13 +158,21 @@
         const data = await response.json();
 
         if (data.success) {
+          // Hide login box
           loginBox.classList.add('hidden');
+
+          // Show links and tableau section
           links.classList.remove('hidden');
+          tableauSection.classList.remove('hidden');
+
+          // Update header text
           tagline.textContent = 'View the data below';
           mainTitle.textContent = 'Welcome back';
 
+          // Initialize Tableau
+          initTableau();
         } else {
-          errorMessage.textContent = data.message;
+          errorMessage.textContent = data.message || 'Invalid login credentials.';
           errorMessage.style.display = 'block';
         }
       } catch (error) {
@@ -211,10 +192,8 @@
       };
       new tableau.Viz(placeholderDiv, url, options);
     }
-
-    document.addEventListener('DOMContentLoaded', initTableau);
   </script>
   <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
-
 </body>
 </html>
+

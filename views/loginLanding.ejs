@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="/styles.css">
   <style>
     /* General styles for header */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%; /* Ensure full height for page content */
+    }
+
     header {
       position: relative;
       height: 100vh;
@@ -111,7 +118,7 @@
 
     .tableau-container #tableauViz {
       width: 100%;
-      height: 600px;
+      height: 800px; /* Set a sufficient height for the Tableau dashboard */
       border: 1px solid #ddd;
     }
 
@@ -206,7 +213,7 @@
       const url = 'https://public.tableau.com/views/Intex_17333558878840/Dashboard1';
       const options = {
         width: placeholderDiv.offsetWidth,
-        height: 600,
+        height: 800, // Match the container height
         hideTabs: true,
         hideToolbar: true,
       };

@@ -6,9 +6,16 @@
   <title>Login</title>
   <link rel="stylesheet" href="/styles.css">
   <style>
+    /* Remove fixed height to allow page to extend dynamically */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%; /* Ensures the page extends fully */
+    }
+
     header {
       position: relative;
-      height: 100vh;
       background: url('/Images/Home-Page-Header.jpg') no-repeat center center;
       background-size: cover;
       background-attachment: fixed;
@@ -38,7 +45,7 @@
     .header-text .tagline {
       font-size: 1.2rem;
       font-style: italic;
-      color: black;
+      color: white;
     }
 
     #login-box {
@@ -84,11 +91,12 @@
       width: 100%;
       max-width: 1200px;
       text-align: center;
+      padding-bottom: 20px; /* Add padding to prevent cutoff */
     }
 
     .tableau-container #tableauViz {
       width: 100%;
-      height: 600px;
+      height: 800px; /* Set a sufficient height to avoid cutting off */
       border: 1px solid #ddd;
     }
   </style>
@@ -157,25 +165,17 @@
         const data = await response.json();
 
         if (data.success) {
-          // Hide login box
           loginBox.style.display = 'none';
-
-          // Show links and tableau section
           links.style.display = 'block';
           tableauSection.style.display = 'block';
-
-          // Update header text
           tagline.textContent = 'View the data below';
           mainTitle.textContent = 'Welcome back';
-
-          // Initialize Tableau
           initTableau();
         } else {
           errorMessage.textContent = data.message || 'Invalid login credentials.';
           errorMessage.style.display = 'block';
         }
       } catch (error) {
-        // Handle unexpected errors
         errorMessage.textContent = 'An unexpected error occurred.';
         errorMessage.style.display = 'block';
       }
@@ -186,7 +186,7 @@
       const url = 'https://public.tableau.com/views/Intex_17333558878840/Dashboard1';
       const options = {
         width: placeholderDiv.offsetWidth,
-        height: 600,
+        height: 800, /* Match the container height */
         hideTabs: true,
         hideToolbar: true,
       };

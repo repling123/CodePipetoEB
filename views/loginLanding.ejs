@@ -17,8 +17,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; /* Move content to the top */
-      padding-top: 40px; /* Add space at the top */
+      justify-content: flex-start;
+      padding-top: 40px;
       background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url('/Images/Home-Page-Header.jpg');
     }
@@ -58,8 +58,12 @@
       margin: 0 auto;
     }
 
+    #login-box.hidden, #links.hidden, .tableau-container.hidden {
+      display: none;
+    }
+
     #links ul {
-      list-style: none; /* Remove bullet points */
+      list-style: none;
       padding: 0;
     }
 
@@ -97,6 +101,7 @@
     .hidden {
       display: none;
     }
+
   </style>
 </head>
 <body>
@@ -113,7 +118,7 @@
     <div id="login-box">
       <form id="login-form" action="/login" method="POST">
         <h2>Login</h2>
-        <p id="error-message" class="error-message hidden">Username or password is incorrect</p>
+        <p id="error-message" class="error-message" style="display: none;">Username or password is incorrect</p>
         <label for="username">Username</label>
         <input type="text" id="username" name="username" required>
         <label for="password">Password</label>
@@ -163,17 +168,23 @@
         const data = await response.json();
 
         if (data.success) {
+          // Hide login box
           // On successful login
           loginBox.classList.add('hidden');
+
+          // Show links and tableau section
           links.classList.remove('hidden');
           tableauSection.classList.remove('hidden');
+
+          // Update header text
           tagline.textContent = 'View the data below';
           mainTitle.textContent = 'Welcome back';
-          initTableau(); // Initialize Tableau only after login
+
+          // Initialize Tableau
+          initTableau();
         } else {
-          // Show error message
           errorMessage.textContent = data.message || 'Invalid login credentials.';
-          errorMessage.classList.remove('hidden');
+          errorMessage.style.display = 'block';
         }
       } catch (error) {
         // Handle unexpected errors
@@ -197,3 +208,4 @@
   <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
 </body>
 </html>
+

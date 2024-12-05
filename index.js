@@ -1,7 +1,6 @@
 let express = require('express');
 let app = express();
-const cookieParser = require('cookie-parser'); // Import cookie-parser
-let path = require('path');
+const session = require('express-session'); // Import express-sessionlet path = require('path');
 const PORT = process.env.PORT || 3000
 // grab html form from file 
 // allows to pull JSON data from form 
@@ -47,7 +46,24 @@ app.use(
   })
 );
 
-// Static file serving
+// Middleware to serve static files
+app.use(express.static('public'));
+
+// Configure express-session
+app.use(
+  session({
+    secret: 'your-secret-key', // Replace with a strong secret
+    resave: false, // Don't resave session if unmodified
+    saveUninitialized: false, // Don't save empty sessions
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 2, // Session expiration: 2 hours
+      httpOnly: true, // Prevent client-side JavaScript access
+      secure: false, // Set true if using HTTPS
+    },
+  })
+);
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Images', express.static(path.join(__dirname, 'Images')));
 
@@ -93,8 +109,9 @@ app.post('/login', async (req, res) => {
     const user = await knex('adminusers').where({ username, password }).first();
 
     if (user) {
-      res.cookie('security', 'true', { httpOnly: true }); // Set security cookie
-      res.redirect('/'); // Redirect to the homepage
+      req.session.userId = user.userid; // Store user ID in the session
+      req.session.username = user.username; // Optionally store username
+      res.redirect('/'); // Redirect to home page
     } else {
       res.render('loginLanding', { errorMessage: 'Invalid username or password' });
     }
@@ -178,7 +195,6 @@ app.post('/deleteAdmin/:id', isAuthenticated, async (req, res) => {
     res.status(500).send('Error deleting admin user.');
   }
 });
-
 
 
 

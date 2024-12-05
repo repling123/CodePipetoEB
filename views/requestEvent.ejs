@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request an Event</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        form {
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #448947;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Request an Event</h1>
+        <form action="/requestEvent" method="POST">
+            <div class="form-group">
+                <label for="contactfirstname">First Name:</label>
+                <input type="text" id="contactfirstname" name="contactfirstname" required>
+            </div>
+            <div class="form-group">
+                <label for="contactlastname">Last Name:</label>
+                <input type="text" id="contactlastname" name="contactlastname" required>
+            </div>
+            <div class="form-group">
+                <label for="contactemail">Email:</label>
+                <input type="email" id="contactemail" name="contactemail" required>
+            </div>
+            <div class="form-group">
+                <label for="contactnumber">Contact Phone Number:</label>
+                <input type="tel" id="contactnumber" name="contactnumber" required>
+            </div>
+            <div class="form-group">
+                <label for="eventdate">Event Date:</label>
+                <input type="date" id="eventdate" name="eventdate" required>
+            </div>
+            <div class="form-group">
+                <label for="flexibledate">Flexible Date:</label>
+                <input type="checkbox" id="flexibledate" name="flexibledate">
+            </div>
+            <div class="form-group">
+                <label for="eventstarttime">Event Start Time:</label>
+                <input type="time" id="eventstarttime" name="eventstarttime" required>
+            </div>
+            <div class="form-group">
+                <label for="eventlength">Event Length (hours):</label>
+                <input type="number" id="eventlength" name="eventlength" required>
+            </div>
+            <div class="form-group">
+                <label for="eventaddress">Event Address:</label>
+                <input type="text" id="eventaddress" name="eventaddress" required>
+            </div>
+            <div class="form-group">
+                <label for="eventcity">Event City:</label>
+                <input type="text" id="eventcity" name="eventcity" required>
+            </div>
+
+            <div class="form-group">
+                <!-- State Dropdown -->
+                    <label for="eventstate">Event State:</label>
+                    <select id="eventstate" name="eventstate" required>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="eventzipcode">Event Zip Code:</label>
+                <input type="text" id="eventzipcode" name="eventzipcode" required>
+            </div>
+            <div class="form-group">
+                <label for="estimatedattendance">Estimated Attendance:</label>
+                <input type="number" id="estimatedattendance" name="estimatedattendance" required>
+            </div>
+            <div class="form-group">
+                <label for="preferredactivity">Preferred Activity:</label>
+                <select id="preferredactivity" name="preferredactivity" required>
+                    <option value="Non-Sewing">Non-Sewing</option>
+                    <option value="Sewing">Sewing</option>
+                    <option value="Both">Both</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sufficientsewmachines">Sufficient Sewing Machines:</label>
+                <input type="checkbox" id="sufficientsewmachines" name="sufficientsewmachines">
+            </div>
+            <div class="form-group">
+                <label for="numsewers">Number of Sewers:</label>
+                <input type="number" id="numsewers" name="numsewers" required>
+            </div>
+            <div class="form-group">
+                <label for="sufficienttables">Sufficient Tables for your Group:</label>
+                <input type="checkbox" id="sufficienttables" name="sufficienttables">
+            </div>
+
+            <div class="form-group">            
+                <label for="tabletype">Table Type(s):</label>
+                <select id="tabletype" name="tabletype" required>
+                    <option value="rectangle">Rectangle</option>
+                    <option value="round">Round</option>
+                    <option value="both">Both</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="jenstory">Want to Hear Jen's Story?</label>
+                <input type="checkbox" id="jenstory" name="jenstory">
+            </div>
+
+            <div class="form-group">
+                <label for="otherinfo">Other Information:</label>
+                <textarea id="otherinfo" name="otherinfo"></textarea>
+            </div>
+            <input type="hidden" id="approved" name="approved" value="false">
+            <button type="submit">Submit Request</button>
+        </form>
+    </main>
+</body>
+</html>

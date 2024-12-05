@@ -401,10 +401,65 @@ app.get('/', (req, res) => {
 /*HOW CAN I HELP ROUTES*/
   /*SIGN UP ROUTES*/
       //add volunteer get (same as admin voluteer add route)
+
       app.get('/signup', (req, res) => {
         res.render('signup');
       });
+
       //add voluteer post form route
+
+      app.post('/signup', (req, res) => {
+        // Extract form values from req.body
+        const firstname = req.body.firstname || ''; // Default to empty string if not provided
+        const lastname = req.body.lastname || '';
+        const email = req.body.email || '';
+        const phonenum = req.body.phone || '';
+        const age = parseInt(req.body.age); // Convert to integer
+        const gender = req.body.gender || 'Other';
+        const address = req.body.address || '';
+        const city = req.body.city || '';
+        const state = req.body.state || '';
+        const zipcode = req.body.zipcode || '';
+        const placeheard = req.body.placeheard || '';
+        const hourspermonth = parseInt(req.body.hourspermonth); // Convert to integer
+        const preferreddays = req.body.volunteerDays || '';
+        const preferredtime = req.body.preferredtime || '';
+        const commitment = req.body.commitment || '';
+        const leadership = req.body.leadership === 'true';
+        const sewinglevel = req.body.sewinglevel || '';
+        const teachsewing = req.body.teachsewing === 'true';
+        const cantravel = req.body.cantravel === 'true';
+        // Insert the new volunteers into the database
+        knex('volunteers')
+            .insert({
+                volunteerfirstname: firstname,
+                volunteerlastname: lastname,
+                email: email,
+                phonenumber: phonenum,
+                age: age,
+                gender: gender,
+                address: address,
+                city: city,
+                state: state,
+                zipcode: zipcode,
+                placeheard: placeheard,
+                hourspermonth: hourspermonth,
+                preferreddays: preferreddays,
+                preferredtime: preferredtime,
+                commitment: commitment, 
+                leadership: leadership,
+                sewinglevel: sewinglevel,
+                teachseweing: teachsewing,
+                cantravel: cantravel,
+            })
+            .then(() => {
+                res.redirect('/'); // Redirect to the Home page after adding
+            })
+            .catch(error => {
+                console.error('Error adding volunteer:', error);
+                res.status(500).send('Internal Server Error');
+            });
+        });
 
   /*REQUEST EVENT ROUTES*/
       //request Event get

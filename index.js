@@ -42,22 +42,33 @@ app.get('/', (req, res) => {
   res.render('home');  // Renders 'home.ejs' file
 });
 
-// In-memory object for login state
-const loggedInUsers = {};
+// Configure express-session
+app.use(
+  session({
+    secret: 'your-secret-key', // Replace with a strong secret
+    resave: false, // Don't resave session if unmodified
+    saveUninitialized: false, // Don't save empty sessions
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 2, // Session expiration: 2 hours
+      httpOnly: true, // Prevent client-side JavaScript access
+      secure: false, // Set true if using HTTPS
+    },
+  })
+);
 
-// Middleware to check authentication
+// Middleware for Authentication
 function isAuthenticated(req, res, next) {
-  const userId = req.body.userId || req.query.userId;
-  if (loggedInUsers[userId]) {
-    next();
+  if (req.session.userId) {
+    next(); // User is logged in
   } else {
-    res.redirect('/loginLanding'); // Redirect to login page if not authenticated
+    res.redirect('/loginLanding'); // Redirect to login page
+
   }
 }
 
 // Routes
 app.get('/', (req, res) => {
-  res.render('home'); // Render home page
+  res.render('home');
 });
 
 // Login Landing Page
@@ -68,12 +79,13 @@ app.get('/loginLanding', (req, res) => {
 // Login Route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const user = await knex('adminusers').where({ username, password }).first();
+
     if (user) {
-      loggedInUsers[user.userid] = true; // Store login state
-      res.json({ success: true, userId: user.userid, message: 'Login successful' });
+      req.session.userId = user.userid; // Store user ID in the session
+      req.session.username = user.username; // Optionally store username
+      res.json({ success: true, message: 'Login successful' });
     } else {
       res.json({ success: false, message: 'Invalid username or password' });
     }
@@ -85,14 +97,17 @@ app.post('/login', async (req, res) => {
 
 // Logout Route
 app.get('/logout', (req, res) => {
-  const userId = req.query.userId;
-  if (loggedInUsers[userId]) {
-    delete loggedInUsers[userId]; // Remove user from loggedInUsers
-  }
-  res.redirect('/loginLanding');
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      res.status(500).send('Error logging out.');
+    } else {
+      res.redirect('/loginLanding');
+    }
+  });
 });
 
-// Admin Maintenance Page
+// Admin Maintenance Page (Protected)
 app.get('/adminMaintenance', isAuthenticated, async (req, res) => {
   try {
     const result = await knex('adminusers').select('*');
@@ -103,12 +118,12 @@ app.get('/adminMaintenance', isAuthenticated, async (req, res) => {
   }
 });
 
-// Add Admin (GET)
+// Add Admin (GET, Protected)
 app.get('/addAdmin', isAuthenticated, (req, res) => {
   res.render('addAdmin');
 });
 
-// Add Admin (POST)
+// Add Admin (POST, Protected)
 app.post('/addAdmin', isAuthenticated, async (req, res) => {
   const { username, password } = req.body;
 
@@ -121,7 +136,7 @@ app.post('/addAdmin', isAuthenticated, async (req, res) => {
   }
 });
 
-// Edit Admin (GET)
+// Edit Admin (GET, Protected)
 app.get('/editAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
 
@@ -134,7 +149,7 @@ app.get('/editAdmin/:id', isAuthenticated, async (req, res) => {
   }
 });
 
-// Edit Admin (POST)
+// Edit Admin (POST, Protected)
 app.post('/editAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
@@ -148,7 +163,7 @@ app.post('/editAdmin/:id', isAuthenticated, async (req, res) => {
   }
 });
 
-// Delete Admin (POST)
+// Delete Admin (POST, Protected)
 app.post('/deleteAdmin/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
 

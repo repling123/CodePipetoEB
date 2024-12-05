@@ -75,12 +75,20 @@
       border-radius: 3px;
   }
 
+  .edit-button:hover {
+    background-color: #125c64;
+  }
+
   .delete-button {
     background-color: #b80000;
     color: white;
     padding: 5px 10px;
     text-decoration: none;
     border-radius: 3px;
+}
+
+.delete-button:hover {
+  background-color: #741313;
 }
 
   .top-right-button {

@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express();
 const session = require('express-session'); // Import express-session
-const path = require('path'); // Correctly place the path import
+const path = require('path');
 const PORT = process.env.PORT || 3000
 // grab html form from file 
 // allows to pull JSON data from form 

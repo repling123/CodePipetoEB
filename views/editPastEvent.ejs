@@ -44,7 +44,7 @@
 <body>
   <main>
     <h1>Edit Past Event</h1>
-    <form action="/editPastEvent/<%= event.requestid %>" method="POST">
+    <form action="/editPastEvent/<%= event.eventid %>" method="POST">
       <div class="form-group">
         <label for="pasteventdate">Past Event Date:</label>
         <input type="date" id="pasteventdate" name="pasteventdate" value="<%= event.pasteventdate.toISOString().split('T')[0] %>" required />

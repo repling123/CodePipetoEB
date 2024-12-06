@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review and Update Past Event</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+  form {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  input[type="radio"] {
+    width: auto;
+    margin-right: 5px;
+  }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Review and Update Past Event</h1>
+    <form action="/requestedPastEvent/<%= event.requestid %>" method="POST">
+      
+      <div class="form-group">
+        <label for="pasteventdate">Past Event Date:</label>
+        <input type="date" id="pasteventdate" name="pasteventdate" value="<%= event.eventdate ? event.eventdate.toISOString().split('T')[0] : '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label for="pasteventtime">Past Event Time:</label>
+        <input type="time" id="pasteventtime" name="pasteventtime" value="<%= event.eventstarttime || '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label for="eventdurationhours">Past Event Duration (in hours):</label>
+        <input type="number" id="eventdurationhours" name="eventdurationhours" value="<%= event.eventlength || '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label for="pasteventaddress">Past Event Address:</label>
+        <input type="text" id="pasteventaddress" name="pasteventaddress" value="<%= event.eventaddress || '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label for="pasteventcity">Past Event City:</label>
+        <input type="text" id="pasteventcity" name="pasteventcity" value="<%= event.eventcity || '' %>" />
+      </div>
+
+<div class="form-group">
+    <label for="pasteventstate">Past Event State:</label>
+    <select id="pasteventstate" name="pasteventstate" required>
+        <option value="AL" <%= event.eventstate === 'AL' ? 'selected' : '' %>>Alabama</option>
+        <option value="AK" <%= event.eventstate === 'AK' ? 'selected' : '' %>>Alaska</option>
+        <option value="AZ" <%= event.eventstate === 'AZ' ? 'selected' : '' %>>Arizona</option>
+        <option value="AR" <%= event.eventstate === 'AR' ? 'selected' : '' %>>Arkansas</option>
+        <option value="CA" <%= event.eventstate === 'CA' ? 'selected' : '' %>>California</option>
+        <option value="CO" <%= event.eventstate === 'CO' ? 'selected' : '' %>>Colorado</option>
+        <option value="CT" <%= event.eventstate === 'CT' ? 'selected' : '' %>>Connecticut</option>
+        <option value="DE" <%= event.eventstate === 'DE' ? 'selected' : '' %>>Delaware</option>
+        <option value="FL" <%= event.eventstate === 'FL' ? 'selected' : '' %>>Florida</option>
+        <option value="GA" <%= event.eventstate === 'GA' ? 'selected' : '' %>>Georgia</option>
+        <option value="HI" <%= event.eventstate === 'HI' ? 'selected' : '' %>>Hawaii</option>
+        <option value="ID" <%= event.eventstate === 'ID' ? 'selected' : '' %>>Idaho</option>
+        <option value="IL" <%= event.eventstate === 'IL' ? 'selected' : '' %>>Illinois</option>
+        <option value="IN" <%= event.eventstate === 'IN' ? 'selected' : '' %>>Indiana</option>
+        <option value="IA" <%= event.eventstate === 'IA' ? 'selected' : '' %>>Iowa</option>
+        <option value="KS" <%= event.eventstate === 'KS' ? 'selected' : '' %>>Kansas</option>
+        <option value="KY" <%= event.eventstate === 'KY' ? 'selected' : '' %>>Kentucky</option>
+        <option value="LA" <%= event.eventstate === 'LA' ? 'selected' : '' %>>Louisiana</option>
+        <option value="ME" <%= event.eventstate === 'ME' ? 'selected' : '' %>>Maine</option>
+        <option value="MD" <%= event.eventstate === 'MD' ? 'selected' : '' %>>Maryland</option>
+        <option value="MA" <%= event.eventstate === 'MA' ? 'selected' : '' %>>Massachusetts</option>
+        <option value="MI" <%= event.eventstate === 'MI' ? 'selected' : '' %>>Michigan</option>
+        <option value="MN" <%= event.eventstate === 'MN' ? 'selected' : '' %>>Minnesota</option>
+        <option value="MS" <%= event.eventstate === 'MS' ? 'selected' : '' %>>Mississippi</option>
+        <option value="MO" <%= event.eventstate === 'MO' ? 'selected' : '' %>>Missouri</option>
+        <option value="MT" <%= event.eventstate === 'MT' ? 'selected' : '' %>>Montana</option>
+        <option value="NE" <%= event.eventstate === 'NE' ? 'selected' : '' %>>Nebraska</option>
+        <option value="NV" <%= event.eventstate === 'NV' ? 'selected' : '' %>>Nevada</option>
+        <option value="NH" <%= event.eventstate === 'NH' ? 'selected' : '' %>>New Hampshire</option>
+        <option value="NJ" <%= event.eventstate === 'NJ' ? 'selected' : '' %>>New Jersey</option>
+        <option value="NM" <%= event.eventstate === 'NM' ? 'selected' : '' %>>New Mexico</option>
+        <option value="NY" <%= event.eventstate === 'NY' ? 'selected' : '' %>>New York</option>
+        <option value="NC" <%= event.eventstate === 'NC' ? 'selected' : '' %>>North Carolina</option>
+        <option value="ND" <%= event.eventstate === 'ND' ? 'selected' : '' %>>North Dakota</option>
+        <option value="OH" <%= event.eventstate === 'OH' ? 'selected' : '' %>>Ohio</option>
+        <option value="OK" <%= event.eventstate === 'OK' ? 'selected' : '' %>>Oklahoma</option>
+        <option value="OR" <%= event.eventstate === 'OR' ? 'selected' : '' %>>Oregon</option>
+        <option value="PA" <%= event.eventstate === 'PA' ? 'selected' : '' %>>Pennsylvania</option>
+        <option value="RI" <%= event.eventstate === 'RI' ? 'selected' : '' %>>Rhode Island</option>
+        <option value="SC" <%= event.eventstate === 'SC' ? 'selected' : '' %>>South Carolina</option>
+        <option value="SD" <%= event.eventstate === 'SD' ? 'selected' : '' %>>South Dakota</option>
+        <option value="TN" <%= event.eventstate === 'TN' ? 'selected' : '' %>>Tennessee</option>
+        <option value="TX" <%= event.eventstate === 'TX' ? 'selected' : '' %>>Texas</option>
+        <option value="UT" <%= event.eventstate === 'UT' ? 'selected' : '' %>>Utah</option>
+        <option value="VT" <%= event.eventstate === 'VT' ? 'selected' : '' %>>Vermont</option>
+        <option value="VA" <%= event.eventstate === 'VA' ? 'selected' : '' %>>Virginia</option>
+        <option value="WA" <%= event.eventstate === 'WA' ? 'selected' : '' %>>Washington</option>
+        <option value="WV" <%= event.eventstate === 'WV' ? 'selected' : '' %>>West Virginia</option>
+        <option value="WI" <%= event.eventstate === 'WI' ? 'selected' : '' %>>Wisconsin</option>
+        <option value="WY" <%= event.eventstate === 'WY' ? 'selected' : '' %>>Wyoming</option>
+    </select>
+</div>
+
+      <div class="form-group">
+        <label for="pasteventzipcode">Past Event Zip Code:</label>
+        <input type="text" id="pasteventzipcode" name="pasteventzipcode" value="<%= event.eventzipcode || '' %>" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="pasteventparticipants">Participants:</label>
+        <input type="number" id="pasteventparticipants" name="pasteventparticipants" value="<%= event.estimatedattendance || '' %>" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="activity">Past Event Zip Code:</label>
+        <input type="text" id="activity" name="activity" value="<%= event.preferredactivity || '' %>" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="itemsproduced">Items Produced:</label>
+        <input type="number" id="itemsproduced" name="itemsproduced" value="<%= event.itemsproduced || '' %>" required/>
+      </div>
+
+    <div class="form-group">
+        <label for="pockets">Pockets:</label>
+        <input type="number" id="pockets" name="pockets" value="<%= event.pockets || '' %>" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="collars">Collars:</label>
+        <input type="number" id="collars" name="collars" value="<%= event.collars || '' %>" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="envelopes">Envelopes:</label>
+        <input type="number" id="envelopes" name="envelopes" value="<%= event.envelopes || '' %>" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="vests">Vests:</label>
+        <input type="number" id="vests" name="vests" value="<%= event.vests || '' %>" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="completedproducts">Completed Products:</label>
+        <input type="number" id="completedproducts" name="completedproducts" value="<%= event.completedproducts || '' %>" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="updated">Updated:</label>
+        <input type="checkbox" id="updated" name="updated" <%= event.updated ? 'checked' : '' %> <%= typeof event.updated === 'undefined' ? '' : 'checked' %> />
+    </div>
+
+    <div class="form-group">
+        <label for="requestid">Request ID:</label>
+        <input type="text" id="requestid" name="requestid" value="<%= event.requestid || '' %>" readonly />
+    </div>
+
+      <button class="edit-button" type="submit">Submit</button>
+      <a class="delete-button" href="/eventMaintenance">Cancel</a>
+    </form>
+  </main>
+</body>
+</html>

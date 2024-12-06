@@ -28,11 +28,11 @@ const knex = require("knex") ({
   "postgres",
   password : process.env.RDS_PASSWORD || 
   // "sqldatabase9128",
-  //"sweatersanitizerhairclip",
-  "Th11384363",
+  "sweatersanitizerhairclip",
+  // "Th11384363",
   database : process.env.RDS_DB_NAME ||
-  "intexscript",
-  //"deletelater",
+  // "intexscript",
+  "deletelater",
   // "ebdb",
   port : process.env.RDS_PORT || 5432,
   ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false  // Fixed line
@@ -461,7 +461,14 @@ app.post('/deleteAdmin/:id', async (req, res) => {
         .andWhere('eventdate', '>=', knex.fn.now())
         .orderBy('eventdate', 'asc');
 
-          res.render('eventMaintenance', { pendingEvents, approvedFutureEvents });
+        // Fetch events in the requestedevents table that are now in the past
+  const requestedPastEvents = await knex('requestedevents')
+      .select('*')
+      .where('eventdate', '<', knex.fn.now())
+      .whereNotIn('requestid', knex('pastevents').select('requestid').whereNotNull('requestid'))
+      .orderBy('eventdate', 'desc');
+
+          res.render('eventMaintenance', { pendingEvents, approvedFutureEvents, requestedPastEvents });
         } catch (err) {
           console.error('Error fetching events:', err);
           res.status(500).send('Error fetching events.');
@@ -591,58 +598,103 @@ app.post('/deleteAdmin/:id', async (req, res) => {
         }
       });
 
-//route to take requested events that are in the past and add them to the pastevents table
-app.post('/migratePastEvents', async (req, res) => {
-  try {
+//initial attempt at a route to take requested events that are in the past and add them to the pastevents table:
 
-// Insert data into pastevents table from requestedevents table where eventdate is in the past
-await knex.raw(`
-  INSERT INTO pastevents (
-    pasteventparticipants, pasteventdate, pasteventtime, eventdurationhours, pasteventaddress, 
-    pasteventcity, pasteventstate, pasteventzipcode, itemsproduced, pockets, collars, 
-    envelopes, vests, completedproducts, requestid, updated
-  )
-  SELECT 
-    estimatedattendance, eventdate, eventstarttime, eventlength, eventaddress, 
-    eventcity, eventstate, eventzipcode, NULL, NULL, NULL, 
-    NULL, NULL, NULL, requestid, false
-  FROM requestedevents
-  WHERE eventdate < NOW()
-  ON CONFLICT (eventid) DO NOTHING
-`);
+// app.post('/migratePastEvents', async (req, res) => {
+//   try {
 
-      // Insert data into pastevents table from requestedevents table where eventdate is in the past
-      // await knex('pastevents').insert(
-      //     knex('requestedevents')
-      //         .select(
-      //           'estimatedattendance as pasteventparticipants',
-      //             'eventdate as pasteventdate',
-      //             'eventstarttime as pasteventtime',
-      //             'eventlength as eventduration',
-      //             'eventaddress as pasteventaddress',
-      //             'eventcity as pasteventcity',
-      //             'eventstate as pasteventstate',
-      //             'eventzipcode as pasteventzipcode',
-      //             knex.raw('NULL as itemsproduced'),        // Explicitly setting NULL
-      //             knex.raw('NULL as pockets'),             // For nullable columns
-      //             knex.raw('NULL as collars'),             // Can also use default values like 0
-      //             knex.raw('NULL as envelopes'),
-      //             knex.raw('NULL as vests'),
-      //             knex.raw('NULL as completedproducts'),
-                 
-      //         )
-      //         .where('eventdate', '<', knex.fn.now())
-      // );
+// // Insert data into pastevents table from requestedevents table where eventdate is in the past
+// await knex.raw(`
+//   INSERT INTO pastevents (
+//     pasteventparticipants, pasteventdate, pasteventtime, eventdurationhours, pasteventaddress, 
+//     pasteventcity, pasteventstate, pasteventzipcode, itemsproduced, pockets, collars, 
+//     envelopes, vests, completedproducts, requestid, updated
+//   )
+//   SELECT 
+//     estimatedattendance, eventdate, eventstarttime, eventlength, eventaddress, 
+//     eventcity, eventstate, eventzipcode, NULL, NULL, NULL, 
+//     NULL, NULL, NULL, requestid, false
+//   FROM requestedevents
+//   WHERE eventdate < NOW()
+//   ON CONFLICT (eventid) DO NOTHING
+// `);
 
-      res.redirect('/eventPastMaintenance'); // Redirect back to past events maintenance page
-      // res.status(200).send('Past events migrated successfully.');
-  } catch (error) {
-      console.error('Error migrating past events:', error);
-      res.status(500).send('Internal Server Error');
-  }
-});
+//       res.redirect('/eventPastMaintenance'); // Redirect back to past events maintenance page
+//       // res.status(200).send('Past events migrated successfully.');
+//   } catch (error) {
+//       console.error('Error migrating past events:', error);
+//       res.status(500).send('Internal Server Error');
+//   }
+// });
 
+
+    // GET route for rendering the requestedPastEvent form
+    app.get('/requestedPastEvent/:requestid', async (req, res) => {
+      const requestid = req.params.requestid;
+
+      try {
+        const event = await knex('requestedevents').where('requestid', requestid).first(); 
+        res.render('requestedPastEvent', { event: event || {} });
+      } catch (err) {
+        console.error('Error fetching requested event:', err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
     
+    // POST route for handling form submission
+    app.post('/requestedPastEvent/:requestid', async (req, res) => {
+      const requestid = req.params.requestid;
+
+      // Extract form data from req.body
+      const {
+        pasteventdate,
+        pasteventtime,
+        eventdurationhours,
+        pasteventaddress,
+        pasteventcity,
+        pasteventstate,
+        pasteventzipcode,
+        pasteventparticipants,
+        itemsproduced,
+        pockets,
+        collars,
+        envelopes,
+        vests,
+        completedproducts,
+        activity,
+      } = req.body;
+
+      const updated = req.body.updated === 'true';
+
+      try {
+        await knex('pastevents').insert({
+          // Auto-incremented eventid
+          pasteventdate,
+          pasteventtime,
+          eventdurationhours,
+          pasteventaddress,
+          pasteventcity,
+          pasteventstate,
+          pasteventzipcode,
+          pasteventparticipants,
+          itemsproduced,
+          pockets,
+          collars,
+          envelopes,
+          vests,
+          completedproducts,
+          activity,
+          updated,
+          requestid: requestid,
+        });
+
+        res.redirect('/eventMaintenance');
+      } catch (err) {
+        console.error('Error saving past event:', err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+
 
       //editPastEvent routes
       // GET route to fetch a specific past event for editing
@@ -709,7 +761,7 @@ await knex.raw(`
           envelopes,
           vests,
           completedproducts,
-          updated: updated === 'true',
+          updated,
         });
 
           res.redirect('/eventPastMaintenance'); // Redirect back to past events maintenance page
